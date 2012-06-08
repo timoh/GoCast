@@ -45,9 +45,9 @@ def balance():
 def salary():
     return render_template("salary.html", is_logged = session.has_key("user_id"))
 
-@main.route("/expenses", methods = ["GET"])
-def expenses():
-    return render_template("expenses.html", is_logged = session.has_key("user_id"))
+@main.route("/transactions", methods = ["GET"])
+def transactions():
+    return render_template("transactions.html", is_logged = session.has_key("user_id"))
 
 @main.route("/channel", methods = ["GET"])
 def channel():
