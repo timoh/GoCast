@@ -49,22 +49,6 @@ def salary():
 def transactions():
     return render_template("transactions.html", is_logged = session.has_key("user_id"))
 
-@main.route("/channel", methods = ["GET"])
-def channel():
-    '''
-    servers channel file for FB JS sdk.
-    read more: https://developers.facebook.com/docs/reference/javascript/
-    '''
-    cache_expire = 60 * 60 * 24 * 365
-    expiration_date = datetime.utcnow() + timedelta(seconds = cache_expire)
-    response = make_response(render_template("channel.html"))
-    response.headers.update({
-        "Pragma" : "public",
-        "Cache-Control" : "max-age={0}".format(cache_expire),
-        "Expires" : expiration_date.strptime("%a, %d %m %Y %H:%M:%S")
-    })
-    return response
-
 @main.route("/login", methods = ["POST"])
 def login():
     ''' 
