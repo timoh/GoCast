@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block script %}
+	{{ super() }}
+	<script src = "{{url_for('static', filename = 'js/appIdea/patch.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+<div id = "editor">
+	<div id = "original">
+		<p><strong>Current version:</strong></p>
+		<div class = "well-white">
+			<p> {{idea.punchline}} </p>
+			<p> {{idea.content }} </p>
+		</div>
+	</div>
+	<div id = "revision-container">
+		<div id = "patch-menu" class = "row">
+			<div class = "span2" style = "background: #def;">
+				<a href = "#revision/prev" > prev </a> 
+			</div>
+			<div class = "span8">
+				Revision: xcv
+			</div>
+			<div class = "span2" style = "background: #def;">
+				<a href = "#revision/next" > next </a> 
+			</div>
+		</div>
+		<div id = "revision"></div>
+	</div>
+		
+	<div id = "voting-container" class = "span2"> &nbsp;</div>
+	<div id = "chat-container">&nbsp;</div>
+</div>
+{% endblock %}
+
+{% block template %}
+	<script type = "text/template" id = "revision-template">
+			
+		<div class = "alert-message block-message <%= closed ? 'success': 'warning' %>">
+			<a class="close" href="#">×</a>
+			<p><strong> Status: </strong><%= closed ? 'Closed': 'Open' %> </p>
+			<p><strong> Accepted: </strong>
+				<%= accepted ? 'True': 'False' %>
+			</p>
+			<p><strong> Commit message: </strong> </p>
+			<p><%= message %> </p>
+			<div class = "alert-actions">
+				<% if(!closed){ %>
+					<a class = "btn small" href = "#"> Decline </a>
+					<a class =  "btn small primary" href = "#"> Accept </a>
+				<% } %>
+			</div>
+		</div>
+		<div class = "view" >
+			 patchContent
+		</div>
+		<div class = "source" style = "visibility: hidden;">
+			<%= !(_.isUndefined(patch)) ? patch : "empty patch"  %>
+		</div>
+	</script>
+
+
+	<script type = "text/template" id  = "voting-template">
+		<div>
+			Menu for idea owner - like accept/decline
+		</div>
+
+		<div>
+			menu for idea contributor
+
+			<div>
+				<button class = "btn"> +1 </button> : (<%= opvotes || 0 %>)
+			</div>
+			<div>
+				<button class = "btn"> -1 </button> : (<%= opvotes || 0 %>)
+			</div>
+		</div>
+		
+	</script>
+
+	<!--  patch template -->
+	<script type = "text/template" id = "patch-template" >
+		<div>
+			<div class = "item-menu">
+				prev | input-select |next
+			</div>
+			<div >
+				content of patch
+			</div>
+			<div>
+				patches
+			</div>
+		</div>
+	</script>
+
+	<!-- chats template -->
+	<script type = "text/template" id = "chat-template">
+		<div>
+			<div class = "item-menu">
+				Chat menu
+			</div>
+
+			chat items
+
+			<div class = "item-menu">
+				Chat menu
+			</div>
+		</div>
+	</script>
+{% endblock %}

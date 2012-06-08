@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>IdeaBag - collect future</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le javascript -->
+    {% block script %}
+        
+    <script src="{{url_for('static', 
+        filename = 'js/libs/jquery/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', 
+        filename = 'js/libs/underscore/underscore.min.js')}}"></script>
+    <script src="{{url_for('static',
+        filename = 'js/libs/backbone/backbone.min.js')}}"></script>
+    <script src="{{url_for('static', 
+        filename = 'js/libs/backbone/backbone.modelbinding.min.js')}}">
+    </script>
+    <script src="{{url_for('static', 
+        filename = 'js/libs/jquery/jquery-ui.min.js')}}"></script>
+
+    <script src = "{{url_for('static', filename = 'js/fb.js')}}"></script>
+    {% endblock %}
+    
+    <!-- Le styles -->
+    {% block style %}
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/prettify.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/ideabag.css')}}">
+    {% endblock %}
+
+    <!-- USER-SIDE TEMPLATES -->
+    {% block template %}
+
+    {% endblock %}
+
+    <!-- Le fav icon -->
+    <link rel="shortcut icon" href="{{url_for('static', filename = 'img/favicon.ico')}}">
+  </head>
+
+  <body id="bootstrap-js">
+
+    <div class="topbar" class = "fill">
+        <div class="topbar-inner">
+            <div class="container canvas">
+            <a class="brand" href="#">IdeaBag</a>
+            {% if is_logged == True %}
+                <ul class="nav">
+                    <li class="active"><a href="/home">Home</a></li>
+                    <li><a href="/idea">Ideas</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            {% endif %}
+                
+            </div>
+        </div>
+    </div>
+    <div style = "position:relative; top: 35px; height : 40px;"> &nbsp; </div>
+    <div class="container canvas">
+        <div class = "row">
+            {% block content %}
+                
+            {% endblock %}
+        </div>
+        <div id = "footer">
+            <div id="fb-root"></div>
+        </div>
+    </div>
+
+  </body>
+</html>
