@@ -1,61 +1,9 @@
 {% extends "base.html" %}
 
-{% block script %}
-	{{ super() }}
-	<script src = "{{url_for('static', filename = "js/appIdea/main.js")}}"></script>
-	
-{% endblock %}
-
 {% block content %}
-	<div class = "row hero-unit">
-		<div class = "span-two-third">
-			
-				<h1> IdeaBag <h1>
-				<h3> Collect, share and develop your opportunities </h3>
-		</div>
-		<div class = "span-one-third" style = "position: relative;">
-			<div style = "position:absolute; right:-80px;"
-				<button id = "login-button" class = "btn large primary">Login</button>
-			</div>
-		</div>
-	</div>
-	<div id = "toplist-container" class = "row">
-		<!-- rendered by template -->
-	</div>
-
-{% endblock %}
-
-{% block template %}
-
-<script type="text/template" id = "toplist-template">
-    <!-- start of top container -->
-    <div class = "span-one-third">
-			<h5 class = "tab">
-				<%= category %>
-			</h5>
-			<ul class = "toplist">
-			<% _.each(toplist, function(item){ %>
-			
-				<li>
-					<div class = "category">
-							<span class = "label important">
-								<%= item.criteria %> : <%= item.value %>
-							</span>
-					</div>
-						
-					<div class = "content">
-						<%= item.content %>
-					</div>
-				</li>
-
-			<%}); %>
-
-				
-			</ul>
-
-		</div>
-
-    <!-- end of top container -->
-</script>
+<h1>GoCast</h1>
+<br />
+<p>GoCast is a mobile app that <b>motivates consumers to save money</b> by visualizing the journey towards reaching an investment goal</p>
+<p><a class="btn btn-primary btn-large">Get started! &raquo;</a></p>
 
 {% endblock %}
