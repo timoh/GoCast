@@ -6,7 +6,7 @@ import os
 from flask import Flask, g
 import simplejson as json
 import mongokit
-import models
+#import models
 
 #BLUEPRINTS
 from main.app import main
@@ -49,11 +49,12 @@ def connect_db():
             db.authenticate(dbconf['user'], dbconf['password'])
 
         models.register(conn)
-    return db, models
+    return db #, models
 
 @application.before_request
 def before_request():
-    g.db, g.models = connect_db()
+    #g.db, g.models= connect_db()
+    g.db = connect_db()
 
 def teardown_request(exception):
     if hasattr(application.g, 'db'):
