@@ -1,7 +1,7 @@
 '''
 Includes database models for Idea main view and for dataobject of ideas.
 '''
-
+import pymongo
 import mongokit
 from mongokit import OR, NOT, IS
 from datetime import datetime
