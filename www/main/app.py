@@ -37,6 +37,18 @@ def index():
 def home():
     return render_template("home.html", is_logged = session.has_key("user_id"))
 
+@main.route("/balance", methods = ["GET"])
+def home():
+    return render_template("balance.html", is_logged = session.has_key("user_id"))
+
+@main.route("/salary", methods = ["GET"])
+def home():
+    return render_template("salary.html", is_logged = session.has_key("user_id"))
+
+@main.route("/expenses", methods = ["GET"])
+def home():
+    return render_template("expenses.html", is_logged = session.has_key("user_id"))
+
 @main.route("/channel", methods = ["GET"])
 def channel():
     '''
