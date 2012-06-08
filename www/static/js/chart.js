@@ -1,4 +1,4 @@
-jQuery(function ($) {
+$(function () {
     var chart;
     $(document).ready(function() {
         chart = new Highcharts.Chart({
@@ -75,5 +75,4 @@ jQuery(function ($) {
             }]
         });
     });
-    
-});​
+});

@@ -37,7 +37,7 @@ def index():
 def home():
     return render_template("home.html", is_logged = session.has_key("user_id"))
 
-@main.route("/balance", methods = ["GET"])
+@main.route("/balance", methods = ["GET", "POST"])
 def balance():
     return render_template("balance.html", is_logged = session.has_key("user_id"))
 
