@@ -7,6 +7,7 @@
   {% block style %}
   <link rel="stylesheet" href="{{url_for('static', filename = 'css/bootstrap.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename = 'css/bootstrap-responsive.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/style.css')}}">
 
   {% endblock %}
   
@@ -29,7 +30,7 @@
               <a class="brand" href="#">GoCast</a>
               <div class="nav-collapse">
                 <ul class="nav">
-                  <li class="active"><a href="#">0. Landing page</a></li>
+                  <li class="active"><a href="/">0. Landing page</a></li>
                   <li><a href="/balance">1. Starting balance</a></li>
                   <li><a href="/salary">2. Monthly salary</a></li>
                   <li><a href="/expenses">3. Add expenses</a></li>
