@@ -6,10 +6,10 @@ $(function () {
                 renderTo: 'chart1'
             },
             title: {
-                text: 'Combination chart'
+                text: 'Cashflow'
             },
             xAxis: {
-                categories: ['Apples', 'Oranges', 'Pears', 'Bananas', 'Plums']
+                categories: ['1-12', '2-12', '3-12', '4-12', '5-12']
             },
             tooltip: {
                 formatter: function() {
@@ -24,48 +24,15 @@ $(function () {
                     return s;
                 }
             },
-            labels: {
-                items: [{
-                    html: 'Total fruit consumption',
-                    style: {
-                        left: '40px',
-                        top: '8px',
-                        color: 'black'
-                    }
-                }]
-            },
             series: [{
                 type: 'column',
-                name: 'Jane',
+                name: 'Income',
                 data: [3, 2, 1, 3, 4]
-            }, {
-                type: 'column',
-                name: 'John',
-                data: [2, 3, 5, 7, 6]
-            }, {
-                type: 'column',
-                name: 'Joe',
-                data: [4, 3, 3, 9, 0]
-            }, {
+            },  {
                 type: 'spline',
-                name: 'Average',
+                name: 'Balance',
                 data: [3, 2.67, 3, 6.33, 3.33]
             }, {
-                type: 'pie',
-                name: 'Total consumption',
-                data: [{
-                    name: 'Jane',
-                    y: 13,
-                    color: '#4572A7' // Jane's color
-                }, {
-                    name: 'John',
-                    y: 23,
-                    color: '#AA4643' // John's color
-                }, {
-                    name: 'Joe',
-                    y: 19,
-                    color: '#89A54E' // Joe's color
-                }],
                 center: [100, 80],
                 size: 100,
                 showInLegend: false,

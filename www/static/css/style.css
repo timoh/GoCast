@@ -4,3 +4,15 @@
 	        padding-bottom: 40px;
 	}
 }
+
+@media (max-width: 500px){
+	.hero-unit {
+	        padding: 10px;
+	}
+	
+	#chart1 {
+		margin-left:-60px !important;
+		padding: 0px;
+		width:130%;
+	}
+}
