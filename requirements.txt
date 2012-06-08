@@ -2,5 +2,3 @@ flask
 pymongo
 mongokit
 simplejson
-mongokit
-
