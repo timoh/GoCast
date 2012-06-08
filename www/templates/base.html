@@ -19,7 +19,12 @@
   <script src="{{url_for('static', filename = 'js/bootstrap.js')}}"></script>
   <script src="{{url_for('static', filename = 'js/highcharts.js')}}"></script>
   <script src="{{url_for('static', filename = 'js/modules/exporting.js')}}"></script>
+  <script src="{{url_for('static', filename = 'js/mixpanel_events.js')}}"></script>
   {% endblock %}
+  
+  <!-- start Mixpanel --><script type="text/javascript">(function(d,c){var a,b,g,e;a=d.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===d.location.protocol?"https:":"http:")+'//api.mixpanel.com/site_media/js/api/mixpanel.2.js';b=d.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b);c._i=[];c.init=function(a,d,f){var b=c;"undefined"!==typeof f?b=c[f]=[]:f="mixpanel";g="disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
+for(e=0;e<g.length;e++)(function(a){b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,0)))}})(g[e]);c._i.push([a,d,f])};window.mixpanel=c})(document,[]);
+mixpanel.init("8303444a5e0c578e1f625453d5f8fa0d");</script><!-- end Mixpanel -->
 
   </head>
   
@@ -27,19 +32,19 @@
     <div class="navbar navbar-fixed-top">
           <div class="navbar-inner">
             <div class="container">
-              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <a class="btn btn-navbar" id="navbar_collapse-button" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </a>
-              <a class="brand" href="#">GoCast</a>
+              <a class="brand" id="navbar_brand-button" href="/">GoCast</a>
               <div class="nav-collapse">
                 <ul class="nav">
-                  <li class="active"><a href="/">0. Landing page</a></li>
-                  <li><a href="/balance">1. Starting balance</a></li>
-                  <li><a href="/salary">2. Monthly salary</a></li>
-                  <li><a href="/transactions">3. Add transactions</a></li>
-                  <li><a href="/home">4. See the results</a></li>
+                  <li class="active"><a id="navbar_landing_page-button" href="/">0. Landing page</a></li>
+                  <li><a id="navbar_balance-button" href="/balance">1. Starting balance</a></li>
+                  <li><a id="navbar_salary-button" href="/salary">2. Monthly salary</a></li>
+                  <li><a id="navbar_transactions-button" href="/transactions">3. Add transactions</a></li>
+                  <li><a id="navbar_home-button" href="/home">4. See the results</a></li>
                 </ul>
               </div><!--/.nav-collapse -->
             </div>
@@ -60,7 +65,7 @@
           <hr>
 
           <footer>
-            <p>&copy; GoCast at AaltoES <a href="http://aaltoes.com/build-it/">Build It.</a> 2012</p>
+            <p>&copy; GoCast at AaltoES <a id="build_it-button" href="http://aaltoes.com/build-it/">Build It.</a> 2012</p>
           </footer>
 
         </div> <!-- /container -->
