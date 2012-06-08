@@ -1,0 +1,55 @@
+{ 
+ "comments": {
+ 	"DEBUG": "enable/disable debug mode",
+ 	"TESTING": "enable/disable testing mode",
+ 	"PROPAGATE_EXCEPTIONS":	"explicitly enable or disable the propagation of exceptions. If not set or explicitly set to None this is implicitly true if either TESTING or DEBUG is true.",
+ 	
+ 	"PRESERVE_CONTEXT_ON_EXCEPTION" : "by default if the application is in debug mode the request context is not popped on exceptions to enable debuggers to introspect the data. This can be disabled by this key. You can also use this setting to force-enable it for non debug execution which might be useful to debug production applications (but also very risky).",
+ 	"SECRET_KEY": "the secret key",
+ 	"SESSION_COOKIE_NAME": "",
+ 	"SESSION_COOKIE_DOMAIN": "the domain for the session cookie. If this is not set, the cookie will be valid for all subdomains of SERVER_NAME.",
+ 	"SESSION_COOKIE_PATH": "the path for the session cookie. If this is not set the cookie will be valid for all of APPLICATION_ROOT or if that is not set for / ",
+ 	"SESSION_COOKIE_HTTPONLY": "controls if the cookie should be set with the httponly flag. Defaults to True.",
+ 	
+	"SESSION_COOKIE_SECURE": "controls if the cookie should be set with the secure flag. Defaults to False.",
+	"PERMANENT_SESSION_LIFETIME": "the lifetime of a permanent session as datetime.timedelta object. Starting with Flask 0.8 this can also be an integer representing seconds.",
+	
+	"USE_X_SENDFILE": "enable/disable x-sendfile",
+	"LOGGER_NAME": "the name of the logger",
+	"SERVER_NAME": "the name and port number of the server. Required for subdomain support (e.g.: 'myapp.dev:5000') Note that localhost does not support subdomains so setting this to “localhost” does not help.",
+	
+	"APPLICATION_ROOT": "If the application does not occupy a whole domain or subdomain this can be set to the path where the application is configured to live. This is for session cookie as path value. If domains are used, this should be None.",
+	
+	"MAX_CONTENT_LENGTH": "If set to a value in bytes, Flask will reject incoming requests with a content length greater than this by returning a 413 status code.",
+	
+	"TRAP_HTTP_EXCEPTIONS": "If this is set to True Flask will not execute the error handlers of HTTP exceptions but instead treat the exception like any other and bubble it through the exception stack. This is helpful for hairy debugging situations where you have to find out where an HTTP exception is coming from.",
+	
+	"TRAP_BAD_REQUEST_ERRORS": "Werkzeug’s internal data structures that deal with request specific data will raise special key errors that are also bad request exceptions. Likewise many operations can implicitly fail with a BadRequest exception for consistency. Since it’s nice for debugging to know why exactly it failed this flag can be used to debug those situations. If this config is set to True you will get a regular traceback instead."
+ 	
+ },
+
+ "settings": {
+ 	"DEBUG": true,
+ 	"TESTING": true,
+ 	"PROPAGATE_EXCEPTIONS": true,
+ 	"PRESERVE_CONTEXT_ON_EXCEPTION": true,
+ 	"SECRET_KEY": "\\xa6\\xd9\\x05\\x8eJ\\xd1!\\xc5\\xd4^O\\ny5\\x91\\xba\\xa7\\x97\\xa9V(\\x8a\\xd8\\xca",
+ 	"SESSION_COOKIE_NAME": null,
+ 	"SESSION_COOKIE_DOMAIN": null,
+ 	"SESSION_COOKIE_PATH": null,
+ 	"SESSION_COOKIE_HTTPONLY" : true,
+ 	"SESSION_COOKIE_SECURE": false,
+ 	"PERMANENT_SESSION_LIFETIME": 10,
+ 	"USE_X_SENDFILE": false,
+ 	"SERVER_NAME": null,
+ 	"MAX_CONTENT_LENGTH": null,
+ 	"TRAP_HTTP_EXCEPTIONS": false,
+ 	"DATABASE": {
+ 		"host": "mongodb://root:zcQjagdt5HeIQPN2zdGu@rankademy-timgluz-db-0.dotcloud.com:20360",
+ 		"port": 20360,
+ 		"db": "unigo",
+ 		"user": "rankademydb",
+ 		"password": "dQ34awof"
+ 	}	
+ }
+}

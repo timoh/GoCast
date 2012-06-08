@@ -1,0 +1,175 @@
+#idea-content : {
+    min-height: 10%;
+    max-height: 80%;
+}
+
+.idea-container : {
+  margin : 0px 0px 0px 0px;
+  padding : 0px;
+}
+
+#idea-menu {
+  margin-top : -14px;
+  background : #dadcee;
+  line-height: 22px;
+  border-bottom : 1px #d4dae8;
+}
+
+#idea-list li a : {
+    display: block;
+    width: 100%,
+}
+
+#idea-list li a:hover {
+    background-color: #00f;
+    color: #fff;
+    
+}
+
+.idea-item {
+  padding : 0px 5px 5px 0px;
+  border-color: #d4dae8;
+  background-color: #fff;/*#eceff6;*/
+  background-repeat: repeat-x;
+  border-color: #3b5998;
+  border                : 1px solid #d4dae8;
+  border                : 1px solid rgba(0, 0, 0, 0.05);
+  -webkit-border-radius : 4px;
+  -moz-border-radius    : 4px;
+  border-radius         : 4px;
+  -webkit-box-shadow    : inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow       : inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow            : inset 0 1px 1px rgba(0, 0, 0, 0.05);
+ 
+}
+
+.idea-item-menu {
+  margin-top : 0px;
+  padding : 5px 5px 0px 5px;
+  border-bottom: 1px solid #d4dae8;
+}
+
+.idea-item-content {
+  padding : 5px;
+  word-wrap: break-word;
+}
+
+.idea-context-menu {
+  float : right;
+}
+
+.idea-operational-menu {
+
+}
+
+.idea-context-menu : before {
+  content : &nbsp;
+}
+.idea-context-menu {
+    position: relative;
+    right : 5px;
+    bottom : -10px;
+    z-index : 2;
+}
+
+.idea-item-text-container {
+    background-color : #fdfdfd;
+}
+
+
+
+.menu {
+    padding: 5px 10px 5px 10px;
+    background-color: #f2f2f2;
+    color: #627aad;
+}
+
+/* MAINPAGE TOPLISTS --------------------------------------------- */
+
+ul.toplist {
+  list-style-type : none;
+  padding:0px;
+  margin:0px;
+}
+
+ul.toplist > li {
+  visibility: block; 
+  background-image: url(http://placehold.it/40x40); 
+  background-position : 5px 14px; 
+  background-repeat : no-repeat; 
+  padding-left : 46px;
+}
+
+ul.toplist > li > .category {
+  margin-left : -42px;
+}
+
+ul.toplist > li > .content {
+  height: 40px; 
+  overflow : hidden;
+}
+
+
+
+/*  -------------------------
+ TAGSINPUT CSS 
+
+ */
+div.tagsinput { 
+  border: 1px solid #d4dae8; 
+  background: #FFF; 
+  padding: 5px; 
+  width: 200px;
+  height: 30px; 
+  overflow-y: auto;
+}
+
+div.tagsinput span.tag { 
+  border: 1px solid #d4dae8; 
+  -moz-border-radius:2px; 
+  -webkit-border-radius:2px; 
+  display: block; 
+  float: left; 
+  padding: 5px; 
+  text-decoration:none; 
+  background: #eceff6; 
+  color: #333333; 
+  margin-right: 5px; 
+  margin-bottom:5px;
+ 
+}
+
+div.tagsinput span.tag a { 
+  font-weight: bold; 
+  color: #333333; 
+  text-decoration:none; 
+   
+} 
+
+div.tagsinput input { 
+  width:80px; margin:0px; 
+  font-family: helvetica; 
+  border:1px solid transparent; 
+  padding:5px; 
+  background: transparent; 
+  color: #000; 
+  outline:0px;  
+  margin-right:5px; 
+  margin-bottom:5px; 
+}
+
+div.tagsinput div { 
+  display:block; 
+  float: left; 
+}
+ 
+.tags_clear { 
+  clear: both; 
+  width: 100%; 
+  height: 0px; 
+}
+
+.not_valid {
+  background: #FBD8DB !important; 
+  color: #90111A !important;
+}
