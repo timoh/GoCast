@@ -39,9 +39,18 @@ def home():
 
 @main.route("/balance", methods = ["GET", "POST"])
 def balance():
-    return render_template("balance.html", is_logged = session.has_key("user_id"))
+    if request.method == "POST":
+        print request.method
+        print request.form['amount']
+        g.db["testcoll"].insert({
+            "datetime": datetime.utcnow(),
+            "amount" : request.form['amount']
+            })
+        return redirect('/salary')
+    else:
+        return render_template("balance.html")
 
-@main.route("/salary", methods = ["GET"])
+@main.route("/salary", methods = ["GET", "POST"])
 def salary():
     return render_template("salary.html", is_logged = session.has_key("user_id"))
 

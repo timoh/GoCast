@@ -8,9 +8,9 @@
   
   <p>How much money do you have right now?</p>
   
-  <form>
-    <input id="balance_amount-field" type="text" class="span3" placeholder="ex. 0,00&euro;">
-      <button id="balance-submit" type="submit" class="btn btn-primary">Submit</button>
+  <form method = "POST">
+    <input name="amount" type="text" class="span3" placeholder="ex. 0,00&euro;" />
+    <input name="balance-submit" type="submit" class="btn btn-primary" />
   </form>
 
 {% endblock %}

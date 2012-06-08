@@ -1,2 +1,11 @@
 GoCast
     Your personal saving goal managing web-application.
+
+
+usage:
+
+Using Heroku toolbelt
+>>> foreman start
+
+Or just using python
+>>> python www/run.py

@@ -12,8 +12,8 @@ import mongokit
 from main.app import main
 
 
-PROD_CONFIG = "config_prod.json"
-DEV_CONFIG = "config_dev.json"
+PROD_CONFIG = "./www/config_prod.json"
+DEV_CONFIG = "./www/config_dev.json"
 APP_NAME = "gocast"
 
 application = Flask(__name__)
@@ -28,7 +28,7 @@ def init_settings():
 
     else:
         data = json.load(open(DEV_CONFIG, 'r'))
-        println("NB! Database runs with local settings.")
+        print("NB! Database runs with local settings.\n")
         settings = data["settings"]
 
     #filter out None values
@@ -47,7 +47,7 @@ def connect_db():
         if dbconf.has_key('user'):
             db.authenticate(dbconf['user'], dbconf['password'])
 
-        models.register(conn)
+        #models.register(conn)
     return db #, models
 
 @application.before_request
@@ -59,6 +59,6 @@ def teardown_request(exception):
     if hasattr(application.g, 'db'):
         g.db.connection.disconnect()
 
-#init_settings()
+init_settings()
 
 application.register_blueprint(main)
