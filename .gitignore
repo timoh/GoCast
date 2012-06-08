@@ -1,3 +1,11 @@
 *.pyc
 venv/
 www/static/
+
+www/app.pyc
+
+www/main/__init__.pyc
+
+www/main/app.pyc
+
+www/mjson.pyc
