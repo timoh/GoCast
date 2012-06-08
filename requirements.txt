@@ -1,9 +1,4 @@
 flask
 pymongo
-<<<<<<< HEAD
 mongokit
-=======
 simplejson
-mongokit
-
->>>>>>> 9bf6ac20a7264ff630c23afe9d573291dedd2cee
