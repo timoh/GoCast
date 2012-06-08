@@ -10,13 +10,11 @@ import mongokit
 
 #BLUEPRINTS
 from main.app import main
-#firom idea.app import idea
-#from user.app import user
-#from top.app import top
+
 
 PROD_CONFIG = "config_prod.json"
 DEV_CONFIG = "config_dev.json"
-APP_NAME = "IDEABAG"
+APP_NAME = "gocast"
 
 application = Flask(__name__)
 application.g = g
@@ -63,6 +61,3 @@ def teardown_request(exception):
 #init_settings()
 
 application.register_blueprint(main)
-#application.register_blueprint(idea)
-#application.register_blueprint(user)
-#application.register_blueprint(top)
