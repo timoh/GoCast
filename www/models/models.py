@@ -6,6 +6,7 @@ import mongokit
 from mongokit import OR, NOT, IS
 from datetime import datetime
 
+#from bson import ObjectId
 from pymongo.objectid import ObjectId
 from pymongo.dbref import DBRef
 

@@ -28,6 +28,7 @@ def init_settings():
 
     else:
         data = json.load(open(DEV_CONFIG, 'r'))
+        println("NB! Database runs with local settings.")
         settings = data["settings"]
 
     #filter out None values
