@@ -45,10 +45,10 @@
  	"MAX_CONTENT_LENGTH": null,
  	"TRAP_HTTP_EXCEPTIONS": false,
  	"DATABASE": {
- 		"host": "mongodb://root:zcQjagdt5HeIQPN2zdGu@rankademy-timgluz-db-0.dotcloud.com:20360",
- 		"port": 20360,
- 		"db": "unigo",
- 		"user": "rankademydb",
+ 		"host": "ds033767.mongolab.com",
+ 		"port": 33767,
+ 		"db": "heroku_app5100410",
+ 		"user": "gocast",
  		"password": "dQ34awof"
  	}	
  }

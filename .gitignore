@@ -1,11 +1,5 @@
 *.pyc
+venv
 venv/
-www/static/
 
-www/app.pyc
-
-www/main/__init__.pyc
-
-www/main/app.pyc
-
-www/mjson.pyc
+venv/lib/python2.7/site-packages/easy-install.pth
