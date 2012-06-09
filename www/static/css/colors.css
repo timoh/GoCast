@@ -16,17 +16,27 @@
 	by Timo H. // 2012
 
 */
-
-
-
 	/* BACKGROUND COLOR NAVY BLUE */
 body {
 	background-color: #023a6e; /* navy blue */
+	background-image:url('/static/img/bg_hd.png') !important;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-position:center; 
 }
 
 	/* CHANGE THE SHOWCASE BOX INTO LIGHT BLUE */
 .hero-unit{
 	background-color: #00a0c1; /* light blue */
+	background-color: rgba(0,160,193,0.6);
+}
+
+.hero-unit p {
+	color: #ddd;
+}
+
+.hero-unit label {
+	color: #bbb;
 }
 
 	/* HERO UNIT HEADER COLOR TO WHITE */
@@ -107,5 +117,5 @@ body {
 
 	/* SET FOOTER TEXT COLOR TO WHITE */
 footer p {
-	color: #fff; /* white */
+	color: #aaa; /* white */
 }
