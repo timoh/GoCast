@@ -116,6 +116,20 @@ body {
   filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.disabled,
+.btn-primary[disabled] {
+  background-color: #5d3281;
+  *background-color: #bb41b8;
+}
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #bb41b8 \9;
+}
+
 	/* SET BOLDED TEXT IN HERO UNIT TO GREY COLOR */
 .hero-unit b, .hero-unit strong {
 	color: #ddd; /* grey */
