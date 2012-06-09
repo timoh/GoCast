@@ -1,17 +1,20 @@
 '''
 Main view
 '''
+from functools import wraps
 
 from flask import Blueprint
 from flask import render_template
-from flask import g, request, jsonify, session, url_for, redirect
+from flask import g, request, jsonify, session, url_for, redirect, flash
 from flask import make_response
 
 import mjson
 import random
 from bson import ObjectId
+#import rpxtokenurl
+import janrain
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 main = Blueprint("main", __name__)
 
@@ -24,6 +27,14 @@ def error(msg):
     doc = {"success" : False,
             "msg" : msg}
     return jsonify(doc)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not ("user_id" in session) :
+            return redirect(url_for('main.index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 def remove_redundant_keys(d, keys):
     [d.pop(key) for key in d.keys() if key not in keys]
@@ -44,7 +55,9 @@ def add_doc(collection, doc = None):
         print "doc added."
         return g.db[collection].find({"_id": doc_id})
 
+
 @main.route("/balance", methods = ["GET", "POST"])
+#@login_required
 def balance():
     if request.method == "POST":
         add_doc("testcoll",
@@ -143,41 +156,65 @@ def channel():
     cache_expire = 60 * 60 * 24 * 365
     expiration_date = datetime.utcnow() + timedelta(seconds = cache_expire)
     response = make_response(render_template("channel.html"))
-    response.headers.update({
-        "Pragma" : "public",
-        "Cache-Control" : "max-age={0}".format(cache_expire),
-        "Expires" : expiration_date.strptime("%a, %d %m %Y %H:%M:%S")
-    })
+    response.headers["Pragma"] = "public"
+    response.headers["Cache-Control"] = "max-age={0}".format(cache_expire)
+    response.headers["Expires"] = expiration_date.strftime("%a, %d %m %Y %H:%M:%S")
+  
     return response
 
-@main.route("/login", methods = ["POST"])
-def login():
-    ''' 
-    NB! request.data expects that Content-Type is not application/encoded-form-*, 
-    Use application/json instead.
-    '''
-    user_info = mjson.loads(request.data)
-    print user_info
-    if 'user_id' not in session:
-        print "registering new user"
-        user = g.db.users.find_one({"id": user_info["id"]});
-        if user is None:
-            #if we didnt find such user, then signup as new user.
-            user_id = g.db.users.insert({
-                "_id": user_info["id"],
-                "name" : user_info["name"],
-                "email" : user_info["email"],
-                "registered": datetime.utcnow()
-            });
-            
-        session["user_id"] = str(user_id)
+#login and logout functions
 
-    return success("Accepted. User session initialized.")
+@main.route("/login", methods = ["GET", "POST"])
+def login():
+    '''handles user login and redirecting to user home page'''
+    if request.method == "GET":
+        return "I'm ajaxian."
+
+    elif request.method == "POST":
+        token = request.form['token']
+        user_info = janrain.authenticate(token)
+        
+        #does this user exists in db,ifnot then adds
+        user_id = signup(user_info)
+        session["user_id"] = user_id
+        #redirect to users homepage
+        print "Logged user id: ", user_id
+        if user_id:
+            flash("You are now logged in.")
+            return redirect('/balance')
+        else:
+            flash("Unsuccessful login. Please try again.")
+    else:
+        abort(404)
 
 
 @main.route("/logout", methods = ["GET"])
 def logout():
-    if 'user_id' in session:
-        del session["user_id"]
-    #return success("User is logged out.");
-    return redirect('/')
+    session.pop("username", None)
+    return redirect(url_for("main.index"))
+
+def signup(user_info):
+    '''adds new user into db'''
+    #does this user exists in db
+    user_id = None
+    user = g.db.users.find_one({"identifier": user_info["identifier"]})
+    #if yes return user id
+    if user:
+        user_id = user["_id"]
+    else:
+        user_id = add_new_user(user_info)
+
+    return user_id
+
+def add_new_user(user_info):
+    '''creates new user profile into db'''
+    
+    new_user = g.db.users.insert({
+        "first_name": user_info["name"]["givenName"],
+        "last_name" : user_info["name"]["familyName"],
+        "headline":  u"alpha-user",
+        "identifier": user_info["identifier"],
+        "email":  user_info.get("verifiedEmail", "")
+    })
+
+    return new_user

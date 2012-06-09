@@ -39,8 +39,8 @@ def run_tasks(user_id):
 	db["users_stat"].insert({
 		"user_id": user_id,
 		"daily_balances": total,
-		"daily_income": incomes,
-		"daily_outcomes": expenses,
+		"daily_incomes": incomes,
+		"daily_expenses": expenses,
 		"computed" : datetime.utcnow()
 		})
 

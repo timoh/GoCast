@@ -39,7 +39,7 @@
  	"SESSION_COOKIE_PATH"           : null,
  	"SESSION_COOKIE_HTTPONLY"       : true,
  	"SESSION_COOKIE_SECURE"         : false,
- 	"PERMANENT_SESSION_LIFETIME"    : 10,
+ 	"PERMANENT_SESSION_LIFETIME"    : 30,
  	"USE_X_SENDFILE"                : false,
  	"SERVER_NAME"                   : null,
  	"MAX_CONTENT_LENGTH"            : null,

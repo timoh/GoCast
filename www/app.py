@@ -1,9 +1,9 @@
 '''
 Main app
 '''
-
 import os
-from flask import Flask, g
+from flask import Flask, g, request, redirect, url_for
+
 import simplejson as json
 import mongokit
 #import models
@@ -15,6 +15,7 @@ from api.app import api
 PROD_CONFIG = "config_prod.json"
 DEV_CONFIG = "config_dev.json"
 APP_NAME = "gocast"
+
 
 application = Flask(__name__)
 application.g = g
