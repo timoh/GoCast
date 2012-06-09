@@ -23,8 +23,6 @@ def daily_total(db, constraints = {}):
 	counts = [(key, val) for key, val in counts.items()]
 	counts = sorted(counts, key= lambda x: x[0])
 	return counts
-	
-	
 
 def run_tasks(user_id):
 	db = connect_db()
@@ -39,8 +37,8 @@ def run_tasks(user_id):
 	db["users_stat"].insert({
 		"user_id": user_id,
 		"daily_balances": total,
-		"daily_income": incomes,
-		"daily_outcomes": expenses,
+		"daily_incomes": incomes,
+		"daily_expenses": expenses,
 		"computed" : datetime.utcnow()
 		})
 

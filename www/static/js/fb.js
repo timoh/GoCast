@@ -1,8 +1,18 @@
 $(document).ready(function(){
+  var fb_dev = '411168845594539',
+    fb_prod = '422541527766916',
+    host = document.location.host,
+    best_key = fb_prod;
+
+  if(host === '127.0.0.1:5000'){
+    best_key = fb_dev;
+    console.log("Using local api.")
+  }
+
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '411168845594539',//'422541527766916', // PROD
-      channelUrl : window.location.href + 'channel', // Channel File
+      appId      : best_key, // PROD
+      channelUrl : "//:"+ window.location.host + '/channel', // Channel File
       status     : true, // check login status
       cookie     : true, // enable cookies to allow the server to access the session
       xfbml      : true  // parse XFBML
@@ -11,39 +21,31 @@ $(document).ready(function(){
     // Additional initialization code here
   };
 
-  // Load the SDK Asynchronously
-  (function(d){
-     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     d.getElementsByTagName('head')[0].appendChild(js);
-   }(document));
-
+   
 
    //add action to login button
    $("#login-button").on("click", function(){
-       FB.login(function(response) {
+       
+
+    FB.login(function(response) {
        if (response.authResponse) {
          console.log('Welcome!  Fetching your information.... ');
          FB.api('/me', function(response) {
            console.log('Good to see you, ' + response.name + '.');
-           console.log(response)
-            //send user info to server
+           //send user info to server
             $.ajax({
-              url : "/login",
+              url : window.location.href + "login",
               type : "POST",
               contentType : "application/json",
               dataType : "json",
               data : JSON.stringify(response),
-              success : function(){window.location.replace(window.location.href + "balance");},
+              
             });
-           //FB.logout(function(response) { console.log('Logged out.');  });
          });
        } else {
          console.log('User cancelled login or did not fully authorize.');
-         window.location.replace(window.location.href);
        }
-     }, {scope: 'email'});
+     });
 
    });
 });
