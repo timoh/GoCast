@@ -27,6 +27,19 @@
 	margin-right:5%;
 }
 
+footer {
+	margin-left:5%;
+}
+
+footer p {
+	margin-left:5%;
+}
+
+footer > hr {
+	max-width:45em;
+	width: 35%;
+}
+
 	/* --- UNIVERSAL STYLES END --- */
 
 

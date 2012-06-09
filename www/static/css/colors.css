@@ -115,7 +115,11 @@ body {
 	color: #ddd; /* grey */
 }
 
-	/* SET FOOTER TEXT COLOR TO WHITE */
+	/* SET FOOTER TEXT COLOR TO LIGHT GRAY */
 footer p {
-	color: #aaa; /* white */
+	color: #aaa; /* light gray */
+}
+
+footer > hr {
+	color: #ccc;
 }
