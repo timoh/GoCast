@@ -3,18 +3,23 @@ $(function () {
     var chart;
     $(document).ready(function() {
 	
-			var days = ['05-31', '06-01', '06-02', '06-03', '06-04', '06-05'];
-			var income = [100, 100, 0, 5, 0, 0];
-			var expenses = [-50, -10, -20, 0, -5, -10];
-			var balance = [150, 90, 70, 75, 70, 60];
+			var days = new Array;/* ['05-31', '06-01', '06-02', '06-03', '06-04', '06-05'];*/
+			var income = new Array;/* = [100, 100, 0, 5, 0, 0];*/
+			var expenses = new Array;/* = [-50, -10, -20, 0, -5, -10];*/
+			var balance = new Array; /* = [150, 90, 70, 75, 70, 60];*/
 			var all_data;
 		
 			$.getJSON('/api/transactions', function(data){
 				all_data = data;
-			
-				console.log(all_data);
 				
-				
+				var i;
+				for (i = 0; i < all_data.length; i += 1) {
+					income[i] = all_data[i].amount;
+					expenses[i] = all_data[i].amount;
+					balance[i] = all_data[i].amount;
+					days[i] = i.toString();
+					console.log('Day '+days[i]+' has '+income[i]+' in income, '+expenses[i]+' in expenses and '+balance[i]+' in balance.');
+				}
 				
 			});
 	
