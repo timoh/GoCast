@@ -31,7 +31,7 @@ $(function () {
                 }
             },
             title: {
-                text: 'Live random data'
+                text: 'Your Cashflow Forecast'
             },
             xAxis: {
                 type: 'datetime',
