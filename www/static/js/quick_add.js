@@ -81,7 +81,7 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_one').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
 				
 			});
 			
@@ -90,7 +90,7 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_five').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
 				
 			});
 			
@@ -99,7 +99,7 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_ten').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
 				
 			});
 			
@@ -108,7 +108,7 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_fifty').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
 				
 			});
 		
