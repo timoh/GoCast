@@ -58,24 +58,59 @@ footer > hr {
 	        padding-bottom: 40px;
 	}
 
-.showcase-img{
-	max-width:780px;
-	margin-top:10px;
-	margin-bottom:30px;
-}
+	.showcase-img{
+		max-width:780px;
+		margin-top:10px;
+		margin-bottom:30px;
+	}
 	
-		/* MAKE LANDING PAGE BUTTON EVEN LARGER */
-.supalarge {
-	width:30%;
-	padding: 20px 32px;
-	font-size: 26px;
-	position:relative;
-	bottom: 180px;
-	margin-bottom:-300px;
+			/* MAKE LANDING PAGE BUTTON EVEN LARGER */
+	.supalarge {
+		width:30%;
+		padding: 20px 32px;
+		font-size: 26px;
+		position:relative;
+		bottom: 180px;
+	}
+
+	#hero-landing {
+		margin-top:-180px;
+		padding-top:22px;
+		padding-bottom:10px;
+	}
+	
 }
 
-
+@media (min-width:601px) and (max-width:979px)  {
+	.supalarge {
+		width:40%;
+		padding: 20px 32px;
+		font-size: 26px;
+		position:relative !important;
+		bottom: 125px !important;
+	}
 	
+	#hero-landing {
+		margin-top:-110px;
+		padding-top:22px;
+		padding-bottom:10px;
+	}
+}	
+
+/* SCREEN SIZES BETWEEN 500px and 980px*/
+
+@media (min-width:501px) and (max-width:600px)  {
+	.supalarge {
+		width:60%;
+		position:relative !important;
+		bottom: 90px !important;
+	}
+	
+	#hero-landing {
+		margin-top:-69px;
+		padding-top:22px;
+		padding-bottom:10px;
+	}
 }
 
 /* SCREEN SIZES SMALLER THAN 500px */
@@ -91,8 +126,16 @@ footer > hr {
 		width:95% !important;
 	}
 	
-	.supalarge{
-		width:92%;
+	.supalarge {
+		width:45%;
+		position:relative !important;
+		bottom: 66px !important;
+	}
+	
+	#hero-landing {
+		margin-top:-56px;
+		padding-top:22px;
+		padding-bottom:10px;
 	}
 	
 	.wide-button {
