@@ -3,5 +3,4 @@ pymongo
 mongokit
 simplejson
 functools
-urllib
 requests
