@@ -19,7 +19,7 @@
 	/* BACKGROUND COLOR NAVY BLUE */
 body {
 	background-color: #023a6e; /* navy blue */
-	background-image:url('/static/img/bg_hd.png') !important;
+	background-image:url('/static/img/bg_hd.jpg') !important;
 	background-repeat:no-repeat;
 	background-attachment:fixed;
 	background-position:center; 

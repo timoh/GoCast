@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block lp_overrides %}
+
+<link rel="stylesheet" href="{{url_for('static', filename = 'css/lp_overrides.css')}}">
+
+{% endblock %}
+
 {% block content %}
 
 <div id="showcase">
