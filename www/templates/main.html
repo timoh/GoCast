@@ -1,13 +1,25 @@
 {% extends "base.html" %}
 
+{% block lp_overrides %}
+
+<link rel="stylesheet" href="{{url_for('static', filename = 'css/lp_overrides.css')}}">
+
+{% endblock %}
+
 {% block content %}
 
-<p class="centered"><img class="showcase-img" src="{{url_for('static', filename = 'img/showcase.png')}}"></p>
+<div id="showcase">
+  <p class="centered"><img class="showcase-img" src="{{url_for('static', filename = 'img/showcase_phones.png')}}"></p>
+
 
 <p class="centered"><a class="btn btn-primary btn-large supalarge" id="login-button" >Get started! &raquo;</a></p>
     
+
+  <p class="centered"><a class="btn btn-primary btn-large supalarge" id="get_started_button" href="/balance">Get started! &raquo;</a></p>
+</div>
+
 <!-- Main hero unit for a primary marketing message or call to action -->
-          <div class="hero-unit"> 
+          <div id="hero-landing" class="hero-unit"> 
     
       
     <p class="centered"><b>4Cash</b> is a mobile app that helps you <b>get motivated</b> to <b>save money</b> by showing the <b>effects of your spending behavior</b> in real time.</p>

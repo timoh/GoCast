@@ -40,13 +40,14 @@ class Prediction(object):
                     We should probably set up a possible confidence settings.
         '''
         if Data is None:
-            self.X = self.acquireData()
+            from datetime import datetime
+            self.X = self.acquireData(start = datetime.utcnow())
         else:
             self.X = Data
-        #self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
-        #self.preRange = preRange;
-        #self.predict = np.zeros((self.preRange,self.X.shape[1]))
-        #self.predictAll = np.zeros((self.preRange,1))
+        self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
+        self.preRange = preRange;
+        self.predict = np.zeros((self.preRange,self.X.shape[1]))
+        self.predictAll = np.zeros((self.preRange,1))
 
     def acquireData(self, start = None, end = None):
         from datetime import datetime
@@ -106,10 +107,10 @@ class Prediction(object):
                 W_best = W
                 best_prediction = err
                 NO = no_neuron
-                Yt_best = np.dot(np.tanh(np.dot(X,W)),B)
-                prediction_val_best = np.dot(np.tanh(np.dot(X_val,W)),B)
+                Yt_best = np.dot(self.mysigmoid(np.dot(X,W)),B)
+                prediction_val_best = np.dot(self.mysigmoid(np.dot(X_val,W)),B)
         print "The number of neuron is %d, and best performance is %f"%(NO,best_prediction)
-        return B_best,W_best,Y,Yt_best#Y_val,prediction_val
+        return B_best,W_best,Y_val,prediction_val_best#Y_val,prediction_val
 
     def SplitData(self,category):
         raw = self.X[:,self.categoryClass[category]]
@@ -167,8 +168,8 @@ if __name__ == "__main__":
     import ipdb 
     from scipy.io import loadmat
     T = loadmat('ts.mat')
-    Data = np.random.rand(1000,4)
-    Data[:,0] = T['ts']
+    Data = np.random.rand(200,4)
+    Data[:,0] = T['ts'][:,:200]
     TestPrediction = Prediction(preRange = 1,Data = Data)
     predict_grocery = TestPrediction.model(category = "Grocery")
     predict_entertain = TestPrediction.model(category = "Entertain")

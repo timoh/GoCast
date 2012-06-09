@@ -10,7 +10,7 @@ import mongokit
 
 #BLUEPRINTS
 from main.app import main
-
+from api.app import api
 
 PROD_CONFIG = "config_prod.json"
 DEV_CONFIG = "config_dev.json"
@@ -81,3 +81,4 @@ if settings is not None:
     application.config.update(settings)
 
 application.register_blueprint(main)
+application.register_blueprint(api)
