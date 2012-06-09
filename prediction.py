@@ -234,6 +234,30 @@ class Prediction(object):
                         print "Successfully Inserted document: %s"% transaction_doc
         return None
 
+    def PredictionDataInsertion(self,prediction_month,month,year,noDay):
+        try: 
+            c = connect_db()
+        except ConnectionFailure, e:
+            sys.stderr.write("Could not connect to Server %s" %e)
+            sys.exit(1)
+
+        db_transaction = c['transactions']
+        Data = {"Grocery":prediction_month[:,0],
+                "Entertain":prediction_month[:,1],
+                "Other":prediction_month[:,2],
+                "Schedule":prediction_month[:,3]}
+        for date in xrange(1,noDay+1):
+            for category in Data.keys():
+                transaction_doc = {
+                        "user_id": "Prediction",
+                        "category": category,
+                        "amount": Data[category][data - 1],
+                        "date": datetime(year,month,date)
+                        }
+                db_transaction.users.insert(transaction_doc,safe = True)
+                print "Successfully Inserted document: %s"% transaction_doc
+        return None
+
 
     def forcast(self,day = datetime.now().day, month = datetime.now().month,year = 2012,Goal,howManyDay = 0):
         '''
@@ -247,6 +271,7 @@ class Prediction(object):
         '''
         [temp, noDay] = monthrange(year,month)
         prediction_month = self.predictOverlAll() # Fix this function --> Include the single predictions
+        self.PredictionDataInsertion(prediction_month)
         if howManyDay == 0:
             howManyDay = noDay - 1
         Goal_diff = prediction_month[howManyDay] - Goal
