@@ -31,15 +31,9 @@ Highcharts.theme = {
 	colors: ["#bb41b8", "#00a0c1", "#004769", "#00a0c1", "#bb41b8", "#00a0c1", "#004769",
 		"#00a0c1", "#bb41b8", "#00a0c1", "#004769"],
 	chart: {
-		backgroundColor: {
-			linearGradient: [0, 0, 250, 500],
-			stops: [
-				[0, 'rgb(48, 48, 96)'],
-				[1, 'rgb(0, 0, 0)']
-			]
-		},
+		backgroundColor: null,
 		borderColor: '#000000',
-		borderWidth: 2,
+		borderWidth: 0,
 		className: 'dark-container',
 		plotBackgroundColor: 'rgba(255, 255, 255, .1)',
 		plotBorderColor: '#CCCCCC',

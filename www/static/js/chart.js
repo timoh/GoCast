@@ -31,7 +31,7 @@ $(function () {
                 }
             },
             title: {
-                text: 'Your Cashflow Forecast'
+                text: ''
             },
             xAxis: {
                 type: 'datetime',
@@ -42,12 +42,12 @@ $(function () {
                 minPadding: 0.2,
                 maxPadding: 0.2,
                 title: {
-                    text: 'Value',
-                    margin: 80
+                    text: '',
+                    margin: 0
                 }
             },
             series: [{
-                name: 'Random data',
+                name: 'Forecast',
                 data: []
             }]
         });        
