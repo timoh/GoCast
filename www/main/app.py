@@ -8,6 +8,7 @@ from flask import g, request, jsonify, session, url_for, redirect
 from flask import make_response
 
 import mjson
+import random
 from bson import ObjectId
 
 from datetime import datetime
@@ -73,37 +74,71 @@ def transactions():
        
         if len(request.form) <= 0:
             return render_template("transactions.html")
-
-        trns = {}
-        trns.update(request.form)
+        
+        trns = request.form
         
         if trns.has_key("datefield"):
             dt_string = datetime.utcnow()
-            dt_string = datetime.strptime(trns["datefield"].pop(), "%d/%m/%Y")
+            dt_string = datetime.strptime(trns["datefield"], "%m/%d/%Y")
         else: 
             dt_string = datetime.utcnow()
 
+        print trns["amount"]
         add_doc("transactions", 
             {
                 "datetime" : dt_string,
                 "user_id" : 1,
-                "amount": float(trns.get("amount", 0.0)),
-                "income": (trns.get("amount", 0.0)  >= 0.0),
-                "regular": trns.get("is_regular", False),
+                "amount": float(trns["amount"]),
+                "income": float(trns["amount"]) > 0,
+                "regular": False, #trns["is_regular"],
                 "currency": {
                     "symbol" : "EUR",
                     "value" : 1.0
                 },
-                "category" : {"test" : True},
+                "category" : "cat{0}".format(random.randint(1, 10)),
                 "added" :  datetime.utcnow()
             })
-        return redirect('/home')
+        return render_template("transactions.html")
 
     return render_template("transactions.html")
 
+@main.route("/transactions/view", methods = ["GET"])
+def trns_view():
+
+    search_params = {}
+    if len(request.args) > 0:
+        qriteria = {}
+        if request.args.has_key("start"):
+            qriteria["$gte"] = request.args["start"]
+        if request.args.has_key("end"):
+            qriteria["$lt"] =  request.args["end"]
+        search_params["datetime"] = qriteria
+
+    table_view = {
+        "headers" : [],
+        "rows" : []
+        }
+    field_filter = { 
+        "user_id": 0 , 
+        "added": 0, 
+        "currency": 0}
+    docs = g.db["transactions"].find(search_params, field_filter)
+    first = True
+    headers = ["_id", "datetime"]
+    for doc in docs:
+        vals = [str(doc.pop("_id")), doc.pop("datetime").strftime("%Y-%m-%d")]
+        if first == True:
+            headers = doc.keys()
+            table_view["headers"] = headers
+            first = False
+
+        table_view["rows"].append(doc.values())
+
+    return mjson.mongo_dumps(table_view)
+
 @main.route("/data/demo", methods = ["GET"])
 def data_demo():
-    import random
+    
     import time
     arr = {
         "time": int(time.time() * 1000), 
