@@ -39,6 +39,8 @@ mixpanel.init("8303444a5e0c578e1f625453d5f8fa0d");</script><!-- end Mixpanel -->
     <div class="navbar navbar-fixed-top" id = "navbar">
           <div class="navbar-inner">
             <div class="container">
+              
+              <!-- .nav-collapse -->
               <a class="btn btn-navbar" id="navbar_collapse-button" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -47,16 +49,19 @@ mixpanel.init("8303444a5e0c578e1f625453d5f8fa0d");</script><!-- end Mixpanel -->
               <a class="brand" id="navbar_brand-button" href="/">4Cash</a>
               <div class="nav-collapse">
                 <ul class="nav">
-                  <li class="active"><a id="navbar_" href="/">0. Landing page</a></li>
-                  <li><a id="navbar_balance" href="/balance">1. Starting balance</a></li>
-                  <li><a id="navbar_transactions" href="/transactions">2. Add transactions</a></li>
-                  <li><a id="navbar_home" href="/home">3. See the results</a></li>
+                  <li class="active"><a id="navbar_" href="/">Home</a></li>
+                  <li><a id="navbar_balance" href="/balance">Setup</a></li>
+                  <li><a id="navbar_transactions" href="/transactions">Add Transactions</a></li>
+                  <li><a id="navbar_home" href="/home">See the Results!</a></li>
                 </ul>
-              </div><!--/.nav-collapse -->
+              </div>
+              <!--/ .nav-collapse -->
+              
             </div>
           </div>
         </div>
-
+        
+        <!-- container -->
         <div class="container">
             
             {% block content %}
@@ -69,7 +74,8 @@ mixpanel.init("8303444a5e0c578e1f625453d5f8fa0d");</script><!-- end Mixpanel -->
             <p>&copy; 4Cash at AaltoES <a id="build_it-button" href="http://aaltoes.com/build-it/">Build It.</a> 2012</p>
           </footer>
 
-        </div> <!-- /container -->
+        </div> 
+        <!-- /container -->
     
   </body>
   
