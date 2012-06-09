@@ -13,13 +13,8 @@
 
 jQuery(function($){
 	$(document).ready(function() {
-		
-		var catcher = function(evt) {
-		    if (evt.touches.length < 2)
-		        evt.preventDefault();
-		};
 
-		$('#quick_add-btn_grp').bind('touchstart', catcher, true);
+		$('#quick_add-btn_grp').nodoubletapzoom;
 		
 		/*
 		
