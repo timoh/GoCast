@@ -41,7 +41,7 @@ class Prediction(object):
         '''
         if Data is None:
             from datetime import datetime
-            self.X = self.acquireData(start = datetime.utcnow())
+            self.X = self.acquireData(start = datetime(2010,1,1),end = datetime(2011,12,31))
         else:
             self.X = Data
         self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
@@ -51,27 +51,31 @@ class Prediction(object):
 
     def acquireData(self, start = None, end = None):
         from datetime import datetime
-        db = connect_db()
+        c = connect_db()
+        db = c['transactions.users']
         field_filters = {
-            "currency": 0,
-            "added": 0,
-            "_id": 0
+            "user_id": 4,
+            "category": "Entertain"
         }
         constrains = {}
         if start is not None:
-            constrains["datetime"] = {"$gte": start}
+            constrains["date"] = {"$gte": start}
 
         if end is not None:
-            constrains["datetime"]["$lt"] = end 
+            constrains["date"]["$lte"] = end 
         else:
-            constrains["datetime"]["$lt"] = datetime.utcnow()
+            constrains["date"]["$lte"] = datetime.utcnow()
+
+        constrains["user_id"] = 4
 
 
-        rows = db.transactions.find(constrains, field_filters)
+        rows = db.find(constrains)#, field_filters)
+        
         data = []
         for row in rows:
             data.append(row.values())
             
+        ipdb.set_trace()
         return np.array(data)
 
     def predictSingle(self,B,W,category):
@@ -220,7 +224,7 @@ class Prediction(object):
                     #print "Date: %d,%d,%d"%(year,month,date)
                     index_transaction = (year - 2010 ) * 365 + sum(noDay[:month-1]) + date - 1
                     #print "Index: %d"%(index_transaction)
-                    for category in ["Grocery"]:
+                    for category in Data.keys():
                         transaction_doc = {
                                 "user_id": 4,
                                 "category": category,
