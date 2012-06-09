@@ -23,7 +23,6 @@
 	"MAX_CONTENT_LENGTH": "If set to a value in bytes, Flask will reject incoming requests with a content length greater than this by returning a 413 status code.",
 	
 	"TRAP_HTTP_EXCEPTIONS": "If this is set to True Flask will not execute the error handlers of HTTP exceptions but instead treat the exception like any other and bubble it through the exception stack. This is helpful for hairy debugging situations where you have to find out where an HTTP exception is coming from.",
-	
 	"TRAP_BAD_REQUEST_ERRORS": "Werkzeug’s internal data structures that deal with request specific data will raise special key errors that are also bad request exceptions. Likewise many operations can implicitly fail with a BadRequest exception for consistency. Since it’s nice for debugging to know why exactly it failed this flag can be used to debug those situations. If this config is set to True you will get a regular traceback instead."
  	
  },
@@ -45,6 +44,7 @@
  	"MAX_CONTENT_LENGTH": null,
  	"TRAP_HTTP_EXCEPTIONS": false,
  	"DATABASE": {
+ 		"protocol" : "mongodb",
  		"host": "ds033767.mongolab.com",
  		"port": 33767,
  		"db": "heroku_app5100410",

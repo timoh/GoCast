@@ -45,6 +45,7 @@
  	"MAX_CONTENT_LENGTH"            : null,
  	"TRAP_HTTP_EXCEPTIONS"          : false,
  	"DATABASE": {
+ 		"protocol": "mongodb",
  		"host": "ds033767.mongolab.com",
  		"port": 33767,
  		"db": "heroku_app5100410",
