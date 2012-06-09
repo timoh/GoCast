@@ -2,7 +2,8 @@
 
 
 {% block content %}
-
+<!-- Main hero unit for a primary marketing message or call to action -->
+          <div class="hero-unit">
   <h2>Transactions</h2>
   
     <br />
@@ -11,24 +12,35 @@
   
   <form method = "POST">
     <label>Amount of money spent / earned</label>
+<<<<<<< HEAD
     <input name = "amount" id="amount" type="text" class="span3" placeholder="ex. 0,00&euro;">
+=======
+    <input id="transactions-amount" type="text" class="span3" placeholder="ex. 0,00&euro;">
+>>>>>>> e9180e246b45d5a6d9affe7440ebaa3f771b2dfd
     
     
     <label>Quick add amount</label>
     <div class="btn-toolbar" id="quick_add-btn_grp">
       <div class="btn-group">
-        <button id="button-sign" class="btn">+/-</button>
-        <button class="btn quick_add-number_button" id="button-add_one">+1</button>
-        <button class="btn quick_add-number_button" id="button-add_five">+5</button>
-        <button class="btn quick_add-number_button" id="button-add_ten">+10</button>
+        <button id="button-sign" class="btn btn-primary">+/-</button>
+        <button id="button-add_one" class="btn quick_add-number_button btn-primary" >+1</button>
+        <button id="button-add_five" class="btn quick_add-number_button btn-primary" >+5</button>
+        <button id="button-add_ten" class="btn quick_add-number_button btn-primary" >+10</button>
+        <button id="button-add_fifty" class="btn quick_add-number_button btn-primary" >+50</button>
       </div>
     </div>
     
     
     <label>Date of expense / income</label>
+<<<<<<< HEAD
     <input name =  "datefield" id="date-field" class = "datefield" type="text" class="span3" placeholder="ex. 1.1.2012">
+=======
+    <input id="transactions-date" class = "datefield" type="text" class="span3" placeholder="ex. 1.1.2012">
+>>>>>>> e9180e246b45d5a6d9affe7440ebaa3f771b2dfd
     <br />
       <button id="transactions-submit" type="submit" class="btn btn-primary">Submit</button>
   </form>
+
+</div>
 
 {% endblock %}

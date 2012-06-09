@@ -1,0 +1,111 @@
+/*
+
+	COLOR STYLES FOR GOCAST
+	
+	NO OTHER STYLES HERE!
+	
+		COLORS:
+		light blue: 				#00a0c1
+		navy blue:					#023a6e
+		dark blue: 					#004769
+		extra dark blue: 		#00132d
+		violet: 						#bb41b8
+		dark violet:				#5d3281
+
+
+	by Timo H. // 2012
+
+*/
+
+
+
+	/* BACKGROUND COLOR NAVY BLUE */
+body {
+	background-color: #023a6e; /* navy blue */
+}
+
+	/* CHANGE THE SHOWCASE BOX INTO LIGHT BLUE */
+.hero-unit{
+	background-color: #00a0c1; /* light blue */
+}
+
+	/* HERO UNIT HEADER COLOR TO WHITE */
+.hero-unit h1, .hero-unit h2, .hero-unit h3, .hero-unit h4, .hero-unit h5 {
+	color: #fff; /* white */
+}
+
+	/* CHANGE THE NAVBAR INTO NAVY BLUE	*/
+.navbar-inner {
+  background-color: #00132d;
+  background-image: none;
+}
+
+	/* COLORING OF THE SELECTED NAVBAR ITEM TO LIGHT BLUE */
+
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
+  color: #00132d;
+  background-color: #bb41b8; /* light blue */
+}
+
+	/* BRAND (logo text) COLOR TO WHITE */
+.navbar .brand {
+  color: #fff; /* white */ 
+}
+
+	/* NAVBAR LINKS TO WHITE, BLUE ON HOVER */
+.navbar .nav > li > a:hover {
+  color: #00a0c1;
+}
+
+.navbar .nav > li > a {
+  color: #fff;
+}
+
+	/* NAVBAR BACKGROUND TO DARK VIOLET ON HOVER*/
+.navbar .nav .active > a:hover {
+  color: #ffffff;
+  background-color: #5d3281; //
+}
+
+	/* MAKE THE PRIMARY BUTTON COLORS THE SAME AS THE NAVBAR */
+	/* ORIGINAL COLORS:
+			1: #0088cc //grandient 1
+			2: #0055cc //grandient 2
+			3: #0074cc //bg 1
+			4: #0055cc //bg 2
+		
+		NEW COLORS:
+			1: #bb41b8
+			2: #5d3281
+			3:
+			4:
+
+
+*/
+
+.btn-primary {
+  background-color: #bb41b8;
+  *background-color: #5d3281;
+  background-image: -ms-linear-gradient(top, #bb41b8, #5d3281);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bb41b8), to(#5d3281));
+  background-image: -webkit-linear-gradient(top, #bb41b8, #5d3281);
+  background-image: -o-linear-gradient(top, #bb41b8, #5d3281);
+  background-image: -moz-linear-gradient(top, #bb41b8, #5d3281);
+  background-image: linear-gradient(top, #bb41b8, #5d3281);
+  background-repeat: repeat-x;
+  border-color: #5d3281 #5d3281 #bb41b8;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#bb41b8', endColorstr='#5d3281', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+
+	/* SET BOLDED TEXT IN HERO UNIT TO GREY COLOR */
+.hero-unit b, .hero-unit strong {
+	color: #ddd; /* grey */
+}
+
+	/* SET FOOTER TEXT COLOR TO WHITE */
+footer p {
+	color: #fff; /* white */
+}

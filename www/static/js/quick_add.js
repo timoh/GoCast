@@ -38,6 +38,7 @@ jQuery(function($){
 						#button-add_one
 						#button-add_five
 						#button-add_ten
+						#button-add_fifty
 				
 				*/
 				
@@ -45,11 +46,13 @@ jQuery(function($){
 					$('#button-add_one').text('-1');
 					$('#button-add_five').text('-5');
 					$('#button-add_ten').text('-10');
+					$('#button-add_fifty').text('-50');
 					sign_positive = false;
 				} else {
 					$('#button-add_one').text('+1');
 					$('#button-add_five').text('+5');
 					$('#button-add_ten').text('+10');	
+					$('#button-add_fifty').text('+50');	
 					sign_positive = true;
 				}
 			});
@@ -78,7 +81,7 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_one').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
 				
 			});
 			
@@ -87,7 +90,7 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_five').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
 				
 			});
 			
@@ -96,7 +99,16 @@ jQuery(function($){
 				
 					from_button = parseFloat($('#button-add_ten').text());
 					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
-					$('#amount').val(amount);
+					$('#transactions-amount').val(amount);
+				
+			});
+			
+			$('#button-add_fifty').click(function(e){
+				e.preventDefault();
+				
+					from_button = parseFloat($('#button-add_fifty').text());
+					amount = parseFloat(parseFloat(amount)+parseFloat(from_button));
+					$('#transactions-amount').val(amount);
 				
 			});
 		
