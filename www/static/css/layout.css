@@ -10,6 +10,45 @@
 
 	/* UNIVERSAL STYLES */
 
+.middle {
+	vertical-align:middle;
+}
+
+.positive {
+	color: #00a0c1 !important;
+}
+
+.negative {
+	color: #5d3281 !important;
+}
+
+.arrows {
+	font-size: 1.5em;
+	margin-bottom:50px;
+}
+
+.big {
+	font-size:430% !important;
+}
+
+.down-unoeight-pix {
+	position: relative;
+	top: 1.8em;
+}
+
+.down-deuceuno-pix{
+	position: relative;
+	top: 21px;
+}
+
+.below {
+	overflow: visible;
+	position: relative;
+	top: 65px;
+	left: -120px;
+}
+
+
 #transactions-amount {
 	width:13em !important;
 }
