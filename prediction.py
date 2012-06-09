@@ -4,6 +4,7 @@
 
 import numpy as np
 import os, sys
+import warnings
 
 class Prediction(object):
     def __init__(self,preRange = 7,Data = None):
@@ -40,7 +41,7 @@ class Prediction(object):
 
     def predictSingle(self,B,W,category):
         X = np.concatenate((self.X[-W.shape[0]+1:,self.categoryClass[category]].reshape((1,W.shape[0]-1)),np.ones((1,1))),axis = 1 )
-        prediction = np.dot(np.tanh(np.dot(X,W)),B)
+        prediction = np.dot(self.mysigmoid(np.dot(X,W)),B)
         return prediction
     
     def predictOverAll(self):
@@ -54,66 +55,89 @@ class Prediction(object):
         # Extreme Learning Machine 
         # Simple enough for small data, can be scaled if you want. GPU scaling.
         best_prediction = +np.Inf
-        neuron = [5,10,20,40,80]
+        neuron = [5,8,11,14,17,20,40,60,80]
         for no_neuron in neuron:
             W = np.random.rand(training_x.shape[1] + 1,no_neuron)
             X = np.concatenate((training_x,np.ones((training_x.shape[0],1))),axis=1)
             Y = training_y
-            H = np.tanh(np.dot(X,W))
+            H = self.mysigmoid(np.dot(X,W))
             B = np.dot(np.linalg.pinv(H),Y)
 
             X_val = np.concatenate((validation_x,np.ones((validation_x.shape[0],1))),axis = 1)
             Y_val = validation_y
-            prediction_val = np.dot(np.tanh(np.dot(X_val,W)),B)
-            err =  np.sum(np.sum((prediction_val - Y_val )**2))/(Y_val.shape[0] * Y_val.shape[1])
-            
+            prediction_val = np.dot(self.mysigmoid(np.dot(X_val,W)),B)
+            err =  np.var((prediction_val - Y_val ))/np.var(Y_val);
             if err < best_prediction:
                 B_best = B
                 W_best = W
-        return B_best,W_best
+                best_prediction = err
+                NO = no_neuron
+                Yt_best = np.dot(np.tanh(np.dot(X,W)),B)
+                prediction_val_best = np.dot(np.tanh(np.dot(X_val,W)),B)
+        print "The number of neuron is %d, and best performance is %f"%(NO,best_prediction)
+        return B_best,W_best,Y,Yt_best#Y_val,prediction_val
 
     def SplitData(self,category):
         raw = self.X[:,self.categoryClass[category]]
-        X = np.zeros((1,3 * self.preRange))
+        X = np.zeros((1,9 * self.preRange))
         Y = np.zeros((1, self.preRange))
-        if self.X.shape[0]  >= self.preRange * 4 :
-            for i in xrange(0,self.X.shape[0] - self.preRange * 4):
-                X = np.vstack((X,raw[i:i+3*self.preRange].reshape((1,3*self.preRange))))
-                Y = np.vstack((Y,raw[i+3*self.preRange:i+4*self.preRange].reshape((1,self.preRange))))
+        if self.X.shape[0]  >= self.preRange * 10 :
+            for i in xrange(0,self.X.shape[0] - self.preRange * 10):
+                X = np.vstack((X,raw[i:i+9*self.preRange].reshape((1,9*self.preRange))))
+                Y = np.vstack((Y,raw[i+9*self.preRange:i+10*self.preRange].reshape((1,self.preRange))))
         else:
-            print "More data shall be added or what? I feel like not analyzing you. :/"
+            warnings.warn("More data shall be added or what? I feel like not analyzing you. :/")
+            warnings.warn("The data is probably not sufficient enough for the prediction.")
+            warnings.warn("The maximum we can do is to predict %f"%(self.X.shape[0]/4))
+            raise IndexError
         X = X[1:,:].copy()
         Y = Y[1:,:].copy()
 
-        training_X = np.array([x for i,x in enumerate(X) if i % 7 != 0])
-        validation_X = np.array([x for i,x in enumerate(X) if i % 7 == 0])
-        training_Y = np.array([x for i,x in enumerate(Y) if i % 7 != 0])
-        validation_Y = np.array([x for i,x in enumerate(Y) if i % 7 == 0])
+        randomize = 0
+        if randomize:
+            idx = np.random.permutation(X.shape[0])
+            X = X[idx].copy()
+            Y = Y[idx].copy()
+        split_idx = np.floor(0.8 * X.shape[0])
+        training_X = X[:split_idx]
+        validation_X = X[split_idx:]
+        training_Y = Y[:split_idx]
+        validation_Y = Y[split_idx:]
         return training_X, training_Y, validation_X, validation_Y
 
     def model(self,category = "Grocery"):
-        [B, W] = self.train(category)
+        [B, W,val_y,val_t] = self.train(category)
 
         predict = self.predictSingle(B,W,category)
         self.predict[:,self.categoryClass[category]] = predict
         # Add the combination functionality to another function
         #self.predict = np.concatenate((predict_grocery,predict_entertain,predict_other),axis = 1)
         #self.predictOverAll = self.predictOverAll()
-
+        visualize = 1
+        if visualize:
+            import matplotlib.pyplot as plt
+            plt.plot(val_y)
+            plt.plot(val_t,'r--')
+            plt.ylabel('Something')
+            plt.show()
         return predict
+
+    def mysigmoid(self,x):
+        return 1/(1+np.exp(-x))
+
+
 
 
 if __name__ == "__main__":
     import numpy as np
     import ipdb 
-    TestPrediction = Prediction(Data = np.random.rand(100,4))
+    from scipy.io import loadmat
+    T = loadmat('ts.mat')
+    Data = np.random.rand(1000,4)
+    Data[:,0] = T['ts']
+    TestPrediction = Prediction(preRange = 1,Data = Data)
     predict_grocery = TestPrediction.model(category = "Grocery")
-    print predict_grocery
     predict_entertain = TestPrediction.model(category = "Entertain")
-    print predict_entertain
     predict_other = TestPrediction.model(category = "Other")
-    print predict_other
     predict_Schedule = TestPrediction.model(category = "Schedule")
-    print predict_Schedule
     predict_all = TestPrediction.predictOverAll()
-    ipdb.set_trace()
