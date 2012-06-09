@@ -119,12 +119,10 @@ footer > hr {
 	        padding: 25px;
 	}
 	
-	/*#chart1, #chart2 {
-		margin-left:-60px !important;
+	#chart1, #chart2 {
 		padding: 0px !important;
 		height:33% !important;
-		width:95% !important;
-	}*/
+	}
 	
 	.supalarge {
 		width:45%;
