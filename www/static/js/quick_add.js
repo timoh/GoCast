@@ -14,7 +14,7 @@
 jQuery(function($){
 	$(document).ready(function() {
 
-		$('#quick_add-btn_grp').nodoubletapzoom;
+		$('#quick_add-btn_grp').nodoubletapzoom; //this doesn't work at all
 		
 		/*
 		
