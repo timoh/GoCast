@@ -9,12 +9,14 @@ $(document).ready(function () {
 		$("a#"+a_id).parent().addClass("active");
 	}
 
+
 	$(function() {
 		//add jQueryUI datepicker for every .datefield
         $( ".datefield" ).datepicker({
           showOn: "focus",
           defaultDate: +0
         });
+				$(".datefield").datepicker('setDate', new Date());
     });
 
 	update_navbar();
