@@ -87,6 +87,9 @@ class Prediction(object):
     def predictOverAll(self):
         if not np.where(sum(self.predict,0) == 0):
             print "The final result might not be complete"
+        for keys in self.categoryClass.keys():
+            [B,W] = self.train(keys)
+            self.predict[:,self.categoryClass[keys]] = self.predictSingle(B,W,keys)
         predictOverAll = np.sum(self.predict,1)
         return predictOverAll
 
@@ -115,7 +118,7 @@ class Prediction(object):
                 Yt_best = np.dot(self.mysigmoid(np.dot(X,W)),B)
                 prediction_val_best = np.dot(self.mysigmoid(np.dot(X_val,W)),B)
         print "The number of neuron is %d, and best performance is %f"%(NO,best_prediction)
-        return B_best,W_best,Y_val,prediction_val_best#Y_val,prediction_val
+        return B_best,W_best#Y_val,prediction_val
 
     def SplitData(self,category):
         raw = self.X[:,self.categoryClass[category]]
@@ -291,8 +294,4 @@ if __name__ == "__main__":
     Data[:,0] = T['ts'][:,:200]
     TestPrediction = Prediction(preRange = 1,Data = None)
     #TestPrediction.insertFakeData()
-    predict_grocery = TestPrediction.model(category = "Grocery")
-    predict_entertain = TestPrediction.model(category = "Entertain")
-    predict_other = TestPrediction.model(category = "Other")
-    predict_Schedule = TestPrediction.model(category = "Schedule")
     predict_all = TestPrediction.predictOverAll()
