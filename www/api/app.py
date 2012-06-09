@@ -73,5 +73,12 @@ def index(tid = None):
     else:
         return error("You are too mysterious.[Wrong HTTP method.]")
 
-    
 
+@api.route("/api/userstats/<uid>", methods = ["GET"])
+def users_stat(uid = 0):
+    user = g.db["users_stat"].find_one({"$or": 
+            [{"user_id": uid}, {"user_id": int(uid)}]})
+    if user is None:
+        return error("User with given id `{0}` dont exist in database.".format(uid))
+    else:
+        return mjson.mongo_dumps(user)
