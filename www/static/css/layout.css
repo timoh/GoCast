@@ -153,7 +153,7 @@ footer > hr {
 	/* LARGE SCREENS: SIZES LARGER THAN 980px */
 @media (min-width: 980px){
 	body {
-	        padding-top: 60px;
+	        padding-top: 75px;
 	        padding-bottom: 40px;
 	}
 
