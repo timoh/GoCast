@@ -3,11 +3,23 @@
 	THE SCRIPT FOR HANDLING THE QUICK ADD BUTTONS IN ADD TRANSACTIONS VIEW
 	
 	by Timo H. // 2012 
+	
+	*** KNOWN BUGS ***
+	
+	Quick double tap on iPhone zooms (quick adding made more difficult)
+	--> TODO
 
 */
 
 jQuery(function($){
 	$(document).ready(function() {
+		
+		var catcher = function(evt) {
+		    if (evt.touches.length < 2)
+		        evt.preventDefault();
+		};
+
+		$('#quick_add-btn_grp').bind('touchstart', catcher, true);
 		
 		/*
 		
