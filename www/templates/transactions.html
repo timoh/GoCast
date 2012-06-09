@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 
+{% block script %}
+
+  {{super()}}
+
+  <script>
+    $(function() {
+        $( ".date-field" ).datepicker({
+          showOn: "button",
+          buttonImage: "/static/img/calendar.gif",
+          buttonImageOnly: true
+        });
+    });
+  </script>
+{% endblock %}
+
 {% block content %}
 
   <h2>Transactions</h2>
@@ -8,13 +23,13 @@
   
   <p>Start adding expenses or income!</p>
   
-  <form>
+  <form method = "POST">
     <label>Amount of money spent / earned</label>
-    <input id="transactions_amount-field" type="text" class="span3" placeholder="ex. 0,00&euro;">
+    <input id="amount" type="text" class="span3" placeholder="ex. 0,00&euro;">
     
     <label>Date of expense / income</label>
-    <input id="transactions_date-field" type="text" class="span3" placeholder="ex. 1.1.2012">
-    
+    <input id="date-field" class = "date-field" type="text" class="span3" placeholder="ex. 1.1.2012">
+    <br />
       <button id="transactions-submit" type="submit" class="btn btn-primary">Submit</button>
   </form>
 

@@ -37,26 +37,46 @@ def index():
 def home():
     return render_template("home.html", is_logged = session.has_key("user_id"))
 
+def add_doc(collection, doc = None):
+    if doc is not None:
+        doc_id = g.db[collection].insert(doc)
+        print "doc added."
+        return g.db[collection].find({"_id": doc_id})
+
 @main.route("/balance", methods = ["GET", "POST"])
 def balance():
     if request.method == "POST":
-        print request.method
-        print request.form['amount']
-        g.db["testcoll"].insert({
-            "datetime": datetime.utcnow(),
-            "amount" : request.form['amount']
-            })
+        add_doc("testcoll",
+                {
+                "datetime": datetime.utcnow(),
+                "type": "balance",
+                "amount" : request.form['amount']
+                })
         return redirect('/salary')
     else:
         return render_template("balance.html")
 
 @main.route("/salary", methods = ["GET", "POST"])
 def salary():
-    return render_template("salary.html", is_logged = session.has_key("user_id"))
+    if request.method == "POST":
+        add_doc("testcoll",
+            {"datetime": datetime.utcnow(),
+            "type":  "salary"
+            }.update(request.form))
+        return redirect('/transactions')
 
-@main.route("/transactions", methods = ["GET"])
+    return render_template("salary.html")
+
+@main.route("/transactions", methods = ["GET", "POST"])
 def transactions():
-    return render_template("transactions.html", is_logged = session.has_key("user_id"))
+    if request.method == "POST":
+        add_doc("testcoll", 
+            {
+            "datetime" : datetime.utcnow(),
+            "type": "transactions"}.update(request.form))
+        return redirect('/home')
+
+    return render_template("transactions.html")
 
 @main.route("/login", methods = ["POST"])
 def login():
