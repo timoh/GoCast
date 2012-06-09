@@ -41,7 +41,7 @@ class Prediction(object):
     def predictSingle(self,B,W,category):
         X = np.concatenate((self.X[-W.shape[0]+1:,self.categoryClass[category]].reshape((1,W.shape[0]-1)),np.ones((1,1))),axis = 1 )
         prediction = np.dot(np.tanh(np.dot(X,W)),B)
-        return
+        return prediction
     
     def predictOverAll(self):
         if not np.where(sum(self.predict,0) == 0):
@@ -108,8 +108,12 @@ if __name__ == "__main__":
     import ipdb 
     TestPrediction = Prediction(Data = np.random.rand(100,4))
     predict_grocery = TestPrediction.model(category = "Grocery")
+    print predict_grocery
     predict_entertain = TestPrediction.model(category = "Entertain")
+    print predict_entertain
     predict_other = TestPrediction.model(category = "Other")
+    print predict_other
     predict_Schedule = TestPrediction.model(category = "Schedule")
+    print predict_Schedule
     predict_all = TestPrediction.predictOverAll()
     ipdb.set_trace()
