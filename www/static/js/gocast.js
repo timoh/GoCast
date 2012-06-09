@@ -12,7 +12,7 @@ $(document).ready(function () {
           showOn: "button",
           buttonImage: "/static/img/calendar.gif",
           buttonImageOnly: true,
-          defaultDate: +0
+          defaultDate: +0,
         });
     });
 

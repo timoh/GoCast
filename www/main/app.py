@@ -70,10 +70,33 @@ def salary():
 @main.route("/transactions", methods = ["GET", "POST"])
 def transactions():
     if request.method == "POST":
-        add_doc("testcoll", 
+       
+        if len(request.form) <= 0:
+            return render_template("transactions.html")
+
+        trns = {}
+        trns.update(request.form)
+        
+        if trns.has_key("datefield"):
+            dt_string = datetime.utcnow()
+            dt_string = datetime.strptime(trns["datefield"].pop(), "%d/%m/%Y")
+        else: 
+            dt_string = datetime.utcnow()
+
+        add_doc("transactions", 
             {
-            "datetime" : datetime.utcnow(),
-            "type": "transactions"}.update(request.form))
+                "datetime" : dt_string,
+                "user_id" : 1,
+                "amount": float(trns.get("amount", 0.0)),
+                "income": (trns.get("amount", 0.0)  >= 0.0),
+                "regular": trns.get("is_regular", False),
+                "currency": {
+                    "symbol" : "EUR",
+                    "value" : 1.0
+                },
+                "category" : {"test" : True},
+                "added" :  datetime.utcnow()
+            })
         return redirect('/home')
 
     return render_template("transactions.html")
@@ -129,11 +152,3 @@ def logout():
         del session["user_id"]
 
     return success("User is logged out.");
-
-
-def register_action(action):
-    #register new actions 
-    #TODO: use signals and specific singleton for that
-    new_action = g.db.actions.Action()
-    new_action.update(action)
-    new_action.save()
