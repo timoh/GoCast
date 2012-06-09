@@ -9,6 +9,38 @@
 */
 
 	/* UNIVERSAL STYLES */
+	
+/* FONTS */
+
+  /*SANSATION*/
+	@font-face { 
+		font-family: Sansation !important; 
+		src: url('/static/css/Sansation_Regular.ttf'); } 
+	@font-face { 
+		font-family: Sansation !important; 
+		font-weight: bold; 
+		src: url('/static/css/Sansation_Bold.ttf'); }
+		
+		
+	/*QUICKSAND*/
+	@font-face { 
+		font-family: Quicksand !important; 
+		src: url('/static/css/Quicksand_Light.otf'); } 
+	@font-face { 
+		font-family: Quicksand !important; 
+		font-weight: bold; 
+		src: url('/static/css/Quicksand_Bold.otf'); }
+		
+		/* APPLY THE FONTS TO LANDING PAGE */
+		.nav, #tagline, footer p {
+			font-family: Quicksand, sans-serif;
+		}	
+	
+		#get_started_button, #learn_more-button {
+			font-family: Sansation, sans-serif;
+		}
+
+/* ---- END FONTS ---- */	
 
 .middle {
 	vertical-align:middle !important;
@@ -50,6 +82,26 @@
 	top: 65px !important;
 	left: -120px !important;
 }
+
+.navbar .nav > li > a {
+padding: 0px 10px 11px;
+line-height: 73px;
+height: 58px;
+}
+
+.navbar .brand {
+padding: 8px 20px 12px;
+line-height: 3;
+}
+
+.navbar .btn-group .btn {
+margin: 17px 10px 10px 10px;
+}
+
+li {
+margin: 0 12px 0 12px;
+}
+
 /* --- ARROWS SPECIAL CLASSES END --- */
 
 
