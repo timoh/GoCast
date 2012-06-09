@@ -49,6 +49,10 @@ def index():
 def home():
     return render_template("home.html", is_logged = session.has_key("user_id"))
 
+@main.route("/team", methods = ["GET"])
+def team():
+    return render_template("team.html", is_logged = session.has_key("user_id"))
+
 def add_doc(collection, doc = None):
     if doc is not None:
         doc_id = g.db[collection].insert(doc)

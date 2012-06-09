@@ -6,6 +6,8 @@ import numpy as np
 import os, sys
 import warnings
 from www.app import init_settings
+from datetime import datetime
+from calendar import monthrange
 
 def connect_db():
     import pymongo
@@ -39,40 +41,43 @@ class Prediction(object):
                 (optionals):
                     We should probably set up a possible confidence settings.
         '''
+        self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
         if Data is None:
-            from datetime import datetime
-            self.X = self.acquireData(start = datetime.utcnow())
+            self.X = self.acquireData(start = datetime(2010,1,1),end = datetime(2011,12,31))
         else:
             self.X = Data
-        self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
         self.preRange = preRange;
         self.predict = np.zeros((self.preRange,self.X.shape[1]))
         self.predictAll = np.zeros((self.preRange,1))
 
     def acquireData(self, start = None, end = None):
-        from datetime import datetime
-        db = connect_db()
-        field_filters = {
-            "currency": 0,
-            "added": 0,
-            "_id": 0
-        }
-        constrains = {}
+        c = connect_db()
+        db = c['transactions.users']
+        field_filters = {}
+        constrains = {"user_id":4}
         if start is not None:
-            constrains["datetime"] = {"$gte": start}
+            constrains["date"] = {"$gte": start}
 
         if end is not None:
-            constrains["datetime"]["$lt"] = end 
+            constrains["date"]["$lte"] = end 
         else:
-            constrains["datetime"]["$lt"] = datetime.utcnow()
+            constrains["date"]["$lte"] = datetime.utcnow()
+        #constrains["user_id"] = 4
 
-
-        rows = db.transactions.find(constrains, field_filters)
-        data = []
-        for row in rows:
-            data.append(row.values())
-            
-        return np.array(data)
+        # Matrix Generation Code
+        X = np.zeros((365 * 2,4))
+        i = 0
+        for keys in self.categoryClass.keys():
+            constrains["category"] = keys
+            print keys
+            rows = db.find(constrains)
+            data = []
+            for row in rows:
+                data.append(row.values())
+            raw = np.array(data)[:,[0,2]]
+            X[:,i] = raw[:,1].astype(float)
+            i = i + 1
+        return X
 
     def predictSingle(self,B,W,category):
         X = np.concatenate((self.X[-W.shape[0]+1:,self.categoryClass[category]].reshape((1,W.shape[0]-1)),np.ones((1,1))),axis = 1 )
@@ -82,6 +87,9 @@ class Prediction(object):
     def predictOverAll(self):
         if not np.where(sum(self.predict,0) == 0):
             print "The final result might not be complete"
+        for keys in self.categoryClass.keys():
+            [B,W] = self.train(keys)
+            self.predict[:,self.categoryClass[keys]] = self.predictSingle(B,W,keys)
         predictOverAll = np.sum(self.predict,1)
         return predictOverAll
 
@@ -110,7 +118,7 @@ class Prediction(object):
                 Yt_best = np.dot(self.mysigmoid(np.dot(X,W)),B)
                 prediction_val_best = np.dot(self.mysigmoid(np.dot(X_val,W)),B)
         print "The number of neuron is %d, and best performance is %f"%(NO,best_prediction)
-        return B_best,W_best,Y_val,prediction_val_best#Y_val,prediction_val
+        return B_best,W_best#Y_val,prediction_val
 
     def SplitData(self,category):
         raw = self.X[:,self.categoryClass[category]]
@@ -145,7 +153,7 @@ class Prediction(object):
 
         predict = self.predictSingle(B,W,category)
         self.predict[:,self.categoryClass[category]] = predict
-        visualize = 0
+        visualize = 1
         if visualize:
             import matplotlib.pyplot as plt
             plt.plot(val_y)
@@ -175,7 +183,6 @@ class Prediction(object):
         idx = np.random.permutation(other.shape[0])
         other[idx[:100]] = Raw
         schedule = np.zeros(grocery.shape)
-        from calendar import monthrange
         noDay = []
         for i in xrange(1,13):
             [temp,month_day] = monthrange(2011,i)
@@ -213,14 +220,13 @@ class Prediction(object):
             sys.exit(1)
 
         db_transaction = c['transactions']
-        from datetime import datetime
         for year in [2010,2011]:
             for month in xrange(1,13):
                 for date in xrange(1,noDay[month-1]+1):
                     #print "Date: %d,%d,%d"%(year,month,date)
                     index_transaction = (year - 2010 ) * 365 + sum(noDay[:month-1]) + date - 1
                     #print "Index: %d"%(index_transaction)
-                    for category in ["Grocery"]:
+                    for category in Data.keys():
                         transaction_doc = {
                                 "user_id": 4,
                                 "category": category,
@@ -229,8 +235,54 @@ class Prediction(object):
                                 }
                         db_transaction.users.insert(transaction_doc,safe = True)
                         print "Successfully Inserted document: %s"% transaction_doc
+        return None
 
-        return
+    def PredictionDataInsertion(self,prediction_month,month,year,noDay):
+        try: 
+            c = connect_db()
+        except ConnectionFailure, e:
+            sys.stderr.write("Could not connect to Server %s" %e)
+            sys.exit(1)
+
+        db_transaction = c['transactions']
+        Data = {"Grocery":prediction_month[:,0],
+                "Entertain":prediction_month[:,1],
+                "Other":prediction_month[:,2],
+                "Schedule":prediction_month[:,3]}
+        for date in xrange(1,noDay+1):
+            for category in Data.keys():
+                transaction_doc = {
+                        "user_id": "Prediction",
+                        "category": category,
+                        "amount": Data[category][data - 1],
+                        "date": datetime(year,month,date)
+                        }
+                db_transaction.users.insert(transaction_doc,safe = True)
+                print "Successfully Inserted document: %s"% transaction_doc
+        return None
+
+
+    def forcast(self,day = datetime.now().day, month = datetime.now().month,year = 2012,Goal,howManyDay = 0):
+        '''
+        # Get the current Date
+        # Predict the future remaining Date
+        # Compute the gaol setting amount versus time
+        # For time until present
+        #   Compute the present daily allownace --> fork it to the panels
+        #   Compute the summation of all the new daily allowance I got
+        # 
+        '''
+        [temp, noDay] = monthrange(year,month)
+        prediction_month = self.predictOverlAll() # Fix this function --> Include the single predictions
+        self.PredictionDataInsertion(prediction_month)
+        if howManyDay == 0:
+            howManyDay = noDay - 1
+        Goal_diff = prediction_month[howManyDay] - Goal
+        daily_allowance = np.zeros((noDay,1))
+        actual_transactions = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
+        daily_allowance[:actual_transactions.shape[0]] = sum(actual_transactions,1) - prediction_month[actual_transactions.shape[0]]
+        GoalGather = sum( daily_allowance ) / Goal_diff
+        return GoalGather,daily_allowance[:actual_transactions.shape[0]]
 
 
 if __name__ == "__main__":
@@ -240,10 +292,6 @@ if __name__ == "__main__":
     T = loadmat('ts.mat')
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
-    TestPrediction = Prediction(preRange = 1,Data = Data)
-    TestPrediction.insertFakeData()
-    predict_grocery = TestPrediction.model(category = "Grocery")
-    predict_entertain = TestPrediction.model(category = "Entertain")
-    predict_other = TestPrediction.model(category = "Other")
-    predict_Schedule = TestPrediction.model(category = "Schedule")
+    TestPrediction = Prediction(preRange = 1,Data = None)
+    #TestPrediction.insertFakeData()
     predict_all = TestPrediction.predictOverAll()
