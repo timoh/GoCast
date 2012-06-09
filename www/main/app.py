@@ -78,6 +78,16 @@ def transactions():
 
     return render_template("transactions.html")
 
+@main.route("/data/demo", methods = ["GET"])
+def data_demo():
+    import random
+    import time
+    arr = {
+        "time": int(time.time() * 1000), 
+        "val":  random.randint(1, 20)}
+    return jsonify(arr)
+
+
 @main.route("/login", methods = ["POST"])
 def login():
     ''' 

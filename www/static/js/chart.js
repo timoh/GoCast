@@ -1,45 +1,55 @@
 $(function () {
     var chart;
     $(document).ready(function() {
-        chart = new Highcharts.Chart({
+
+        function requestData() {
+            $.ajax({
+                url: '/data/demo',
+                success: function(dt_point) {
+                    var series = chart.series[0],
+                        point = [dt_point["time"], dt_point["val"]],
+                        shift = series.data.length > 20; // shift if the series is longer than 20
+
+                    //add the point
+
+                    chart.series[0].addPoint(point, true, shift);
+                    
+                    
+                    // call it again after one second
+                    //setTimeout(requestData, 1000);    
+                },
+                cache: false
+            });
+        }
+
+    chart = new Highcharts.Chart({
             chart: {
-                renderTo: 'chart1'
+                renderTo: 'chart1',
+                defaultSeriesType: 'spline',
+                events: {
+                    load: requestData
+                }
             },
             title: {
-                text: 'Cashflow'
+                text: 'Live random data'
             },
             xAxis: {
-                categories: ['1-12', '2-12', '3-12', '4-12', '5-12']
+                type: 'datetime',
+                tickPixelInterval: 150,
+                maxZoom: 20 * 1000
             },
-            tooltip: {
-                formatter: function() {
-                    var s;
-                    if (this.point.name) { // the pie chart
-                        s = ''+
-                            this.point.name +': '+ this.y +' fruits';
-                    } else {
-                        s = ''+
-                            this.x  +': '+ this.y;
-                    }
-                    return s;
+            yAxis: {
+                minPadding: 0.2,
+                maxPadding: 0.2,
+                title: {
+                    text: 'Value',
+                    margin: 80
                 }
             },
             series: [{
-                type: 'column',
-                name: 'Income',
-                data: [3, 2, 1, 3, 4]
-            },  {
-                type: 'spline',
-                name: 'Balance',
-                data: [3, 2.67, 3, 6.33, 3.33]
-            }, {
-                center: [100, 80],
-                size: 100,
-                showInLegend: false,
-                dataLabels: {
-                    enabled: false
-                }
+                name: 'Random data',
+                data: []
             }]
-        });
-    });
+        });        
+});
 });

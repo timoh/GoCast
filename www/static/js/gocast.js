@@ -6,5 +6,15 @@ $(document).ready(function () {
 		$("a#"+a_id).parent().addClass("active");
 	}
 
+	$(function() {
+		//add jQueryUI datepicker for every .datefield
+        $( ".datefield" ).datepicker({
+          showOn: "button",
+          buttonImage: "/static/img/calendar.gif",
+          buttonImageOnly: true,
+          defaultDate: +0
+        });
+    });
+
 	update_navbar();
 });

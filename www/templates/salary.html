@@ -1,18 +1,9 @@
 {% extends "base.html" %}
 
-{% block script%}
+{% block script %}
 
   {{super()}}
 
-  <script>
-    $(function() {
-        $( ".date-field" ).datepicker({
-          showOn: "button",
-          buttonImage: "/static/img/calendar.gif",
-          buttonImageOnly: true
-        });
-    });
-  </script>
 {% endblock %}
 
 {% block content %}
@@ -26,8 +17,8 @@
     <label>Amount of money</label>
     <input name="salary_amount" type="text" class="span3" placeholder="ex. 0,00&euro;" />
     
-    <label>Date of salary payment</label>
-    <input name="salary_date" id = "date-field" type="text" class=".date-field span3" placeholder="ex. 1.1.2012" />
+    <label for ="salary_date" >Date of salary payment</label>
+    <input name="salary_date" type="text" class="datefield span3" placeholder="ex. 1.1.2012" />
     <br />
     <input id="salary-submit" type="submit" class="btn btn-primary" />
   </form>
