@@ -51,6 +51,7 @@ footer > hr {
 	}
 
 .showcase-img{
+	max-width:780px;
 	margin-top:10px;
 	margin-bottom:30px;
 }
@@ -58,10 +59,11 @@ footer > hr {
 		/* MAKE LANDING PAGE BUTTON EVEN LARGER */
 .supalarge {
 	width:30%;
-	margin-top:0px;
 	padding: 20px 32px;
 	font-size: 26px;
-	margin-bottom:30px;
+	position:relative;
+	bottom: 180px;
+	margin-bottom:-300px;
 }
 
 
@@ -71,7 +73,7 @@ footer > hr {
 /* SCREEN SIZES SMALLER THAN 500px */
 @media (max-width: 500px){
 	.hero-unit {
-	        padding: 10px;
+	        padding: 25px;
 	}
 	
 	#chart1 {
@@ -82,7 +84,7 @@ footer > hr {
 	}
 	
 	.supalarge{
-		width:100%;
+		width:92%;
 	}
 	
 	.wide-button {
