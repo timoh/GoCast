@@ -2,7 +2,7 @@
 
 	EVENTS FOR MIXPANEL (gocast.herokuapp.com)
 
-	by Timo H. / 2012
+	by Timo H. / updated June 6th 2012
 
 */
 
@@ -24,11 +24,11 @@ jQuery(function($){
 			});
 	
 			$("#navbar_").click(function() {
-			    mixpanel.track("Navbar Landing page button pressed"); 
+			    mixpanel.track("Navbar Home / landing page button pressed"); 
 			});
 	
 			$("#navbar_balance").click(function() {
-			    mixpanel.track("Navbar Balance button pressed"); 
+			    mixpanel.track("Navbar Setup button pressed"); 
 			});
 	
 			$("#navbar_transactions").click(function() {
@@ -36,10 +36,8 @@ jQuery(function($){
 			});
 	
 			$("#navbar_home").click(function() {
-			    mixpanel.track("Navbar Home button pressed"); 
+			    mixpanel.track("Navbar Results button pressed"); 
 			});
-	
-
 	
 		/*
 	
@@ -49,6 +47,10 @@ jQuery(function($){
 	
 			$("#get_started_button").click(function() {
 			    mixpanel.track("Get Started clicked"); 
+			});
+			
+			$("#learn_more-button").click(function() {
+			    mixpanel.track("Learn More clicked"); 
 			});
 	
 			$("#build_it-button").click(function() {
@@ -82,10 +84,6 @@ jQuery(function($){
 			$("#transactions-date").focus(function() {
 			    mixpanel.track("Transactions Date field focused"); 
 			});
-	
-			$("#transactions-submit").submit(function() {
-			    mixpanel.track("Transactions submitted"); 
-			});
 			
 			$("#button-sign").submit(function() {
 			    mixpanel.track("Quick add switch sign button pushed"); 
@@ -105,6 +103,10 @@ jQuery(function($){
 			
 			$("#button-add_fifty").submit(function() {
 			    mixpanel.track("Quick add button +50 pushed"); 
+			});
+			
+			$("#transactions-submit").submit(function() {
+			    mixpanel.track("Transactions submitted"); 
 			});
 	});
 });
