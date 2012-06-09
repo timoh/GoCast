@@ -12,10 +12,8 @@ $(document).ready(function () {
 	$(function() {
 		//add jQueryUI datepicker for every .datefield
         $( ".datefield" ).datepicker({
-          showOn: "button",
-          buttonImage: "/static/img/calendar.gif",
-          buttonImageOnly: true,
-          defaultDate: +0,
+          showOn: "focus",
+          defaultDate: +0
         });
     });
 
