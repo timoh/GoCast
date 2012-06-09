@@ -5,6 +5,18 @@
 import numpy as np
 import os, sys
 import warnings
+from www.app import init_settings
+
+def connect_db():
+    import pymongo
+    settings = init_settings()["DATABASE"] #builds nice connection string
+    conn = pymongo.Connection(
+        host = settings["host"], 
+        port= settings["port"])
+    db = conn[settings["db"]]
+    if settings.has_key('user'):
+        db.authenticate(settings['user'], settings['password'])
+    return db
 
 class Prediction(object):
     def __init__(self,preRange = 7,Data = None):
@@ -31,13 +43,35 @@ class Prediction(object):
             self.X = self.acquireData()
         else:
             self.X = Data
-        self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
-        self.preRange = preRange;
-        self.predict = np.zeros((self.preRange,self.X.shape[1]))
-        self.predictAll = np.zeros((self.preRange,1))
+        #self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
+        #self.preRange = preRange;
+        #self.predict = np.zeros((self.preRange,self.X.shape[1]))
+        #self.predictAll = np.zeros((self.preRange,1))
 
-    def acquireData(self):
-        return
+    def acquireData(self, start = None, end = None):
+        from datetime import datetime
+        db = connect_db()
+        field_filters = {
+            "currency": 0,
+            "added": 0,
+            "_id": 0
+        }
+        constrains = {}
+        if start is not None:
+            constrains["datetime"] = {"$gte": start}
+
+        if end is not None:
+            constrains["datetime"]["$lt"] = end 
+        else:
+            constrains["datetime"]["$lt"] = datetime.utcnow()
+
+
+        rows = db.transactions.find(constrains, field_filters)
+        data = []
+        for row in rows:
+            data.append(row.values())
+            
+        return np.array(data)
 
     def predictSingle(self,B,W,category):
         X = np.concatenate((self.X[-W.shape[0]+1:,self.categoryClass[category]].reshape((1,W.shape[0]-1)),np.ones((1,1))),axis = 1 )

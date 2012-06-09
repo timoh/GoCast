@@ -82,7 +82,11 @@ footer > hr {
 	}
 	
 	.supalarge{
-		width:90%;
+		width:100%;
+	}
+	
+	.wide-button {
+		width:100%;
 	}
 }
 

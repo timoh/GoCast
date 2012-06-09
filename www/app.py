@@ -12,8 +12,8 @@ import mongokit
 from main.app import main
 
 
-PROD_CONFIG = "./www/config_prod.json"
-DEV_CONFIG = "./www/config_dev.json"
+PROD_CONFIG = "config_prod.json"
+DEV_CONFIG = "config_dev.json"
 APP_NAME = "gocast"
 
 application = Flask(__name__)
@@ -22,20 +22,37 @@ application.g = g
 def init_settings():
     ''' '''
     settings = None
-    if os.environ.has_key(APP_NAME) and os.environ[APP_NAME] == "production":
-        data = json.load(open(PROD_CONFIG, 'r'))
-        settings = data["settings"]
+    abs_path = os.path.abspath(os.path.curdir)
+    
+    if abs_path.find("www") <= 8:
+        abs_path += "/www/"
 
+    if os.environ.has_key(APP_NAME) and os.environ[APP_NAME] == "production":
+        abs_path += PROD_CONFIG
     else:
-        data = json.load(open(DEV_CONFIG, 'r'))
         print("NB! Database runs with local settings.\n")
-        settings = data["settings"]
+        abs_path += DEV_CONFIG
+
+    data = json.load(open(abs_path, 'r'))    
+    settings = data["settings"]
 
     #filter out None values
     map(settings.pop, [key for key,val in settings.iteritems() if val is None])
+    return settings
 
-    if settings:
-        application.config.update(settings)
+def make_db_url():
+    '''builds db connction string  based configuration file'''
+    settings = init_settings()["DATABASE"]
+
+    conn_string = "{0}://{1}:{2}@{3}:{4}/{5}".format(
+        settings["protocol"],
+        settings["user"],
+        settings["password"],
+        settings["host"],
+        settings["port"],
+        settings["db"]
+        )
+    return conn_string
 
 def connect_db():
     '''connects to db and inits db connection'''
@@ -59,6 +76,8 @@ def teardown_request(exception):
     if hasattr(application.g, 'db'):
         g.db.connection.disconnect()
 
-init_settings()
+settings = init_settings()
+if settings is not None:
+    application.config.update(settings)
 
 application.register_blueprint(main)
