@@ -91,7 +91,7 @@ class Prediction(object):
             [B,W] = self.train(keys)
             self.predict[:,self.categoryClass[keys]] = self.predictSingle(B,W,keys)
         predictOverAll = np.sum(self.predict,1)
-        return predictOverAll
+        return predictOverAll,self.predict
 
     def train(self,category):
         training_x,training_y,validation_x,validation_y = self.SplitData(category)
@@ -254,15 +254,15 @@ class Prediction(object):
                 transaction_doc = {
                         "user_id": "Prediction",
                         "category": category,
-                        "amount": Data[category][data - 1],
+                        "amount": Data[category][date - 1],
                         "date": datetime(year,month,date)
                         }
-                db_transaction.users.insert(transaction_doc,safe = True)
+                db_transaction.users.insert(transaction_doc)
                 print "Successfully Inserted document: %s"% transaction_doc
         return None
 
 
-    def forcast(self,day = datetime.now().day, month = datetime.now().month,year = 2012,Goal,howManyDay = 0):
+    def forcast(self,Goal,day = None, month = None,year = None,howManyDay = None):
         '''
         # Get the current Date
         # Predict the future remaining Date
@@ -272,9 +272,19 @@ class Prediction(object):
         #   Compute the summation of all the new daily allowance I got
         # 
         '''
+        if day is None:
+            day = datetime.now().day
+        if month is None:
+            month = datetime.now().month
+        if year is None:
+            year = 2012
+        if howManyDay is None:
+            howManyDay = 20
         [temp, noDay] = monthrange(year,month)
-        prediction_month = self.predictOverlAll() # Fix this function --> Include the single predictions
-        self.PredictionDataInsertion(prediction_month)
+        self.preRange = noDay
+        [prediction_month, prediction_month_detail]= self.predictOverAll() # Fix this function --> Include the single predictions
+        self.PredictionDataInsertion(prediction_month_detail,month,year,noDay)
+        ipdb.set_trace()
         if howManyDay == 0:
             howManyDay = noDay - 1
         Goal_diff = prediction_month[howManyDay] - Goal
@@ -292,6 +302,7 @@ if __name__ == "__main__":
     T = loadmat('ts.mat')
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
-    TestPrediction = Prediction(preRange = 1,Data = None)
+    TestPrediction = Prediction(preRange = 31,Data = None)
     #TestPrediction.insertFakeData()
-    predict_all = TestPrediction.predictOverAll()
+    #predict_all = TestPrediction.predictOverAll()
+    [GoalGather,daily_allowance] = TestPrediction.forcast(Goal = 500,day = 31,month = 1, year = 2012, howManyDay = 30)
