@@ -145,10 +145,7 @@ class Prediction(object):
 
         predict = self.predictSingle(B,W,category)
         self.predict[:,self.categoryClass[category]] = predict
-        # Add the combination functionality to another function
-        #self.predict = np.concatenate((predict_grocery,predict_entertain,predict_other),axis = 1)
-        #self.predictOverAll = self.predictOverAll()
-        visualize = 1
+        visualize = 0
         if visualize:
             import matplotlib.pyplot as plt
             plt.plot(val_y)
@@ -160,7 +157,80 @@ class Prediction(object):
     def mysigmoid(self,x):
         return 1/(1+np.exp(-x))
 
+    def insertFakeData(self):
+        # Create Four different category data
+        '''
+            Grocery,Entertain,Other,Schedule
+        '''
+        grocery = np.random.normal(10,2,365 * 2) # mu = 10 EUR, sigma = 2
+        entertain = np.zeros(grocery.shape)
+        Raw = np.random.normal(50,20, ( 365 * 2 / 7 ) * 2)
+        j = 5
+        for i in xrange(Raw.shape[0]):
+            if j < entertain.shape[0]:
+                entertain[j:j+2] = Raw[i:i+2]
+                j = j + 5;
+        other = np.zeros(grocery.shape)
+        Raw = 100 * np.random.poisson(1,10 * 24)
+        idx = np.random.permutation(other.shape[0])
+        other[idx[:100]] = Raw
+        schedule = np.zeros(grocery.shape)
+        from calendar import monthrange
+        noDay = []
+        for i in xrange(1,13):
+            [temp,month_day] = monthrange(2011,i)
+            noDay.append(month_day)
+        noDay = np.array(noDay)
+        noDay = np.hstack((noDay,noDay))
+        schedule_event = {
+                "salary":[5000,15],
+                "rent":[-800,6],
+                "telephone":[-40,13],
+                "internet":[-40,6],
+                "water":[-20,6],
+                "insurance":[-40,13],
+                "electricity":[-40,6]}
+        j = 0
+        for i in schedule_event.keys():
+            for offset in noDay:
+                schedule[j+ schedule_event[i][1]] = schedule_event[i][0]
+                j = j + offset
+            j = 0
 
+        Data = {
+                "Grocery":-grocery,
+                "Entertain":-entertain,
+                "Other":-other,
+                "Schedule":schedule
+                }
+
+        # Document Insertion
+
+        try: 
+            c = connect_db()
+        except ConnectionFailure, e:
+            sys.stderr.write("Could not connect to Server %s" %e)
+            sys.exit(1)
+
+        db_transaction = c['transactions']
+        from datetime import datetime
+        for year in [2010,2011]:
+            for month in xrange(1,13):
+                for date in xrange(1,noDay[month-1]+1):
+                    #print "Date: %d,%d,%d"%(year,month,date)
+                    index_transaction = (year - 2010 ) * 365 + sum(noDay[:month-1]) + date - 1
+                    #print "Index: %d"%(index_transaction)
+                    for category in ["Grocery"]:
+                        transaction_doc = {
+                                "user_id": 4,
+                                "category": category,
+                                "amount": Data[category][index_transaction],
+                                "date": datetime(year,month,date)
+                                }
+                        db_transaction.users.insert(transaction_doc,safe = True)
+                        print "Successfully Inserted document: %s"% transaction_doc
+
+        return
 
 
 if __name__ == "__main__":
@@ -171,6 +241,7 @@ if __name__ == "__main__":
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
     TestPrediction = Prediction(preRange = 1,Data = Data)
+    TestPrediction.insertFakeData()
     predict_grocery = TestPrediction.model(category = "Grocery")
     predict_entertain = TestPrediction.model(category = "Entertain")
     predict_other = TestPrediction.model(category = "Other")
