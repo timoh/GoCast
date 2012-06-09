@@ -10,6 +10,14 @@
 
 	/* UNIVERSAL STYLES */
 
+#transactions-amount {
+	width:13em !important;
+}
+
+#transactions-date, #transactions-submit {
+	max-width:8em !important;
+}
+
 #chart1 {
 	min-width: 400px; 
 	height: 400px; 
