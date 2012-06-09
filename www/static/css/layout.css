@@ -119,7 +119,7 @@ footer > hr {
 	        padding: 25px;
 	}
 	
-	#chart1 {
+	#chart1, #chart2 {
 		margin-left:-60px !important;
 		padding: 0px !important;
 		height:33% !important;
