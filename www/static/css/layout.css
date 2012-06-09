@@ -95,11 +95,11 @@ line-height: 3;
 }
 
 .navbar .btn-group .btn {
-margin: 17px 10px 10px 10px;
+margin: 17px 5px 10px 0px;
 }
 
 li {
-margin: 0 12px 0 12px;
+margin: 0 -5px 0 12px;
 }
 
 /* --- ARROWS SPECIAL CLASSES END --- */
