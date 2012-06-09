@@ -10,10 +10,6 @@
 
 	/* UNIVERSAL STYLES */
 
-body {
-	background-image: '/static/img/bg_hd.png' !important;
-}
-
 #chart1 {
 	min-width: 400px; 
 	height: 400px; 
@@ -31,6 +27,19 @@ body {
 	margin-right:5%;
 }
 
+footer {
+	margin-left:5%;
+}
+
+footer p {
+	margin-left:5%;
+}
+
+footer > hr {
+	max-width:45em;
+	width: 35%;
+}
+
 	/* --- UNIVERSAL STYLES END --- */
 
 
@@ -40,23 +49,22 @@ body {
 	        padding-top: 60px;
 	        padding-bottom: 40px;
 	}
-	
-		/* MAKE LANDING PAGE BUTTON EVEN LARGER */
-.supalarge {
-	width:30%;
-	margin-top:15px;
-	padding: 20px 32px;
-	font-size: 26px;
-}
-
-.justify-showcase_text {
-	margin-left: 8em;
-}
 
 .showcase-img{
 	margin-top:10px;
 	margin-bottom:30px;
 }
+	
+		/* MAKE LANDING PAGE BUTTON EVEN LARGER */
+.supalarge {
+	width:30%;
+	margin-top:0px;
+	padding: 20px 32px;
+	font-size: 26px;
+	margin-bottom:30px;
+}
+
+
 	
 }
 
@@ -71,6 +79,14 @@ body {
 		padding: 0px !important;
 		height:33% !important;
 		width:95% !important;
+	}
+	
+	.supalarge{
+		width:100%;
+	}
+	
+	.wide-button {
+		width:100%;
 	}
 }
 
