@@ -51,17 +51,33 @@ body {
 	color: #fff; /* white */
 }
 
+/*
+*
+*		NAVBAR COLORING (Maria)
+*   	1: #30365c
+*			2: #00092d
+*
+*
+*/
+
+
 	/* CHANGE THE NAVBAR INTO NAVY BLUE	*/
 .navbar-inner {
-  background-color: #00132d;
-  background-image: none;
+  background-color: #30365c;
+  background-image: -moz-linear-gradient(top, #30365c, #00092d);
+  background-image: -ms-linear-gradient(top, #30365c, #00092d);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#30365c), to(#00092d));
+  background-image: -webkit-linear-gradient(top, #30365c, #00092d);
+  background-image: -o-linear-gradient(top, #30365c, #00092d);
+  background-image: linear-gradient(top, #30365c, #00092d);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#30365c', endColorstr='#00092d', GradientType=0);
 }
 
 	/* COLORING OF THE SELECTED NAVBAR ITEM TO LIGHT BLUE */
 
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover {
-  color: #00132d;
+  color: #fff;
   background-color: #bb41b8; /* light blue */
 }
 
