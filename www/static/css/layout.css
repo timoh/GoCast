@@ -143,6 +143,11 @@ footer > hr {
 	width: 35%;
 }
 
+.navbar .btn-navbar {
+	margin-top: 20px;
+	padding: 8px 10px;
+}	
+
 	/* --- UNIVERSAL STYLES END --- */
 
 
@@ -155,7 +160,7 @@ footer > hr {
 
 	.showcase-img{
 		max-width:780px;
-		margin-top:10px;
+		margin-top: 33px;
 		margin-bottom:30px;
 	}
 	
