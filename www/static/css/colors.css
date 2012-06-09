@@ -6,6 +6,7 @@
 	
 		COLORS:
 		light blue: 				#00a0c1
+		navy blue:					#023a6e
 		dark blue: 					#004769
 		extra dark blue: 		#00132d
 		violet: 						#bb41b8
@@ -18,9 +19,9 @@
 
 
 
-	/* BACKGROUND COLOR EXTRA DARK BLUE */
+	/* BACKGROUND COLOR NAVY BLUE */
 body {
-	background-color: #00132d; /* extra dark blue */
+	background-color: #023a6e; /* navy blue */
 }
 
 	/* CHANGE THE SHOWCASE BOX INTO LIGHT BLUE */
@@ -33,33 +34,18 @@ body {
 	color: #fff; /* white */
 }
 
-	/* CHANGE THE NAVBAR GRADIENT INTO VIOLET
-
-		violet: #bb41b8
-		dark violet: #5d3281
-
-	*/
+	/* CHANGE THE NAVBAR INTO NAVY BLUE	*/
 .navbar-inner {
-  background-color: #2c2c2c;
-  background-image: -moz-linear-gradient(top, #bb41b8, #5d3281);
-  background-image: -ms-linear-gradient(top, #bb41b8, #5d3281);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bb41b8), to(#5d3281));
-  background-image: -webkit-linear-gradient(top, #bb41b8, #5d3281);
-  background-image: -o-linear-gradient(top, #bb41b8, #5d3281);
-  background-image: linear-gradient(top, #bb41b8, #5d3281);
-  background-repeat: repeat-x;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#333333', endColorstr='#222222', GradientType=0);
+  background-color: #00132d;
+  background-image: none;
 }
 
-	/* COLORING OF THE SELECTED NAVBAR ITEM TO DARK VIOLET */
+	/* COLORING OF THE SELECTED NAVBAR ITEM TO LIGHT BLUE */
 
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover {
-  color: #ffffff;
-  background-color: #5d3281; /* dark violet */
+  color: #00132d;
+  background-color: #bb41b8; /* light blue */
 }
 
 	/* BRAND (logo text) COLOR TO WHITE */
