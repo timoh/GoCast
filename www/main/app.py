@@ -52,20 +52,9 @@ def balance():
                 "type": "balance",
                 "amount" : request.form['amount']
                 })
-        return redirect('/salary')
+        return redirect('/transactions')
     else:
         return render_template("balance.html")
-
-@main.route("/salary", methods = ["GET", "POST"])
-def salary():
-    if request.method == "POST":
-        add_doc("testcoll",
-            {"datetime": datetime.utcnow(),
-            "type":  "salary"
-            }.update(request.form))
-        return redirect('/transactions')
-
-    return render_template("salary.html")
 
 @main.route("/transactions", methods = ["GET", "POST"])
 def transactions():

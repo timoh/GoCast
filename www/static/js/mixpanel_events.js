@@ -28,11 +28,7 @@ jQuery(function($){
 			});
 	
 			$("#navbar_balance").click(function() {
-			    mixpanel.track("Navbar Salary button pressed"); 
-			});
-	
-			$("#navbar_salary").click(function() {
-			    mixpanel.track("Navbar Salary button pressed"); 
+			    mixpanel.track("Navbar Balance button pressed"); 
 			});
 	
 			$("#navbar_transactions").click(function() {
@@ -71,24 +67,6 @@ jQuery(function($){
 	
 			$("#balance-submit").submit(function() {
 			    mixpanel.track("Balance submitted"); 
-			});
-	
-		/*
-	
-		SALARY PAGE EVENTS
-	
-		*/
-	
-			$("#salary-amount").focus(function() {
-			    mixpanel.track("Salary Amount field focused"); 
-			});
-	
-			$("#salary-date").focus(function() {
-			    mixpanel.track("Salary Date field focused"); 
-			});
-	
-			$("#salary-submit").submit(function() {
-			    mixpanel.track("Salary submitted"); 
 			});
 	
 		/*
