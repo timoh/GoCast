@@ -6,6 +6,8 @@ import numpy as np
 import os, sys
 import warnings
 from www.app import init_settings
+from datetime import datetime
+from calendar import monthrange
 
 def connect_db():
     import pymongo
@@ -41,7 +43,6 @@ class Prediction(object):
         '''
         self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
         if Data is None:
-            from datetime import datetime
             self.X = self.acquireData(start = datetime(2010,1,1),end = datetime(2011,12,31))
         else:
             self.X = Data
@@ -50,7 +51,6 @@ class Prediction(object):
         self.predictAll = np.zeros((self.preRange,1))
 
     def acquireData(self, start = None, end = None):
-        from datetime import datetime
         c = connect_db()
         db = c['transactions.users']
         field_filters = {}
@@ -180,7 +180,6 @@ class Prediction(object):
         idx = np.random.permutation(other.shape[0])
         other[idx[:100]] = Raw
         schedule = np.zeros(grocery.shape)
-        from calendar import monthrange
         noDay = []
         for i in xrange(1,13):
             [temp,month_day] = monthrange(2011,i)
@@ -218,7 +217,6 @@ class Prediction(object):
             sys.exit(1)
 
         db_transaction = c['transactions']
-        from datetime import datetime
         for year in [2010,2011]:
             for month in xrange(1,13):
                 for date in xrange(1,noDay[month-1]+1):
@@ -234,8 +232,29 @@ class Prediction(object):
                                 }
                         db_transaction.users.insert(transaction_doc,safe = True)
                         print "Successfully Inserted document: %s"% transaction_doc
+        return None
 
-        return
+
+    def forcast(self,day = datetime.now().day, month = datetime.now().month,year = 2012,Goal,howManyDay = 0):
+        '''
+        # Get the current Date
+        # Predict the future remaining Date
+        # Compute the gaol setting amount versus time
+        # For time until present
+        #   Compute the present daily allownace --> fork it to the panels
+        #   Compute the summation of all the new daily allowance I got
+        # 
+        '''
+        [temp, noDay] = monthrange(year,month)
+        prediction_month = self.predictOverlAll() # Fix this function --> Include the single predictions
+        if howManyDay == 0:
+            howManyDay = noDay - 1
+        Goal_diff = prediction_month[howManyDay] - Goal
+        daily_allowance = np.zeros((noDay,1))
+        actual_transactions = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
+        daily_allowance[:actual_transactions.shape[0]] = sum(actual_transactions,1) - prediction_month[actual_transactions.shape[0]]
+        GoalGather = sum( daily_allowance ) / Goal_diff
+        return GoalGather,daily_allowance[:actual_transactions.shape[0]]
 
 
 if __name__ == "__main__":
