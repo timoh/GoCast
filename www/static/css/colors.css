@@ -25,6 +25,12 @@ body {
 	background-position:center; 
 }
 
+@media (max-width: 768px) {
+	body{
+		background-image:url('/static/img/bg_ip4s.jpg') !important;
+	}
+}
+
 	/* CHANGE THE SHOWCASE BOX INTO LIGHT BLUE */
 .hero-unit{
 	background-color: #00a0c1; /* light blue */
