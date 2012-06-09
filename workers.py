@@ -23,8 +23,6 @@ def daily_total(db, constraints = {}):
 	counts = [(key, val) for key, val in counts.items()]
 	counts = sorted(counts, key= lambda x: x[0])
 	return counts
-	
-	
 
 def run_tasks(user_id):
 	db = connect_db()

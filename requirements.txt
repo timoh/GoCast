@@ -2,5 +2,6 @@ flask
 pymongo
 mongokit
 simplejson
-requests
+functools
 urllib
+requests
