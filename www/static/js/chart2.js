@@ -8,7 +8,6 @@ $(function () {
     var chart;
     $(document).ready(function() {
 	
-			
 			var all_data;
 		
 			/* GET TRANSACTIONS FROM DB WITH getJSON() */
