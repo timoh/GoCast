@@ -7,35 +7,36 @@
   <h2>Transactions</h2>
   
     <br />
+  <div id="form-container">
+    <p>Start adding expenses or income!</p>
   
-  <p>Start adding expenses or income!</p>
-  
-  <form method = "POST">
-    <label>Amount of money spent / earned</label>
-
-    <input name = "amount" id="transactions-amount" type="text" class="input-large" placeholder="ex. 0.00"><p style="float:left;">&dollar; &nbsp;</p>
-    <div style="float:clear;"></div>
+    <form method = "POST">
+      <label>Amount of money spent / earned</label>
+        <p style="float:left;">&dollar; &nbsp;</p>
+      <input name = "amount" id="transactions-amount" type="text" class="input-large" placeholder="ex. 0.00">
+      <div style="float:clear;"></div>
 
     
     
-    <label>Quick add amount</label>
-    <div class="btn-toolbar wide-button" id="quick_add-btn_grp">
-      <div class="btn-group">
-        <button id="button-sign" class="btn btn-primary btn-large">+/-</button>
-        <button id="button-add_one" class="btn quick_add-number_button btn-primary btn-large" >+1</button>
-        <button id="button-add_five" class="btn quick_add-number_button btn-primary btn-large" >+5</button>
-        <button id="button-add_ten" class="btn quick_add-number_button btn-primary btn-large" >+10</button>
-        <button id="button-add_fifty" class="btn quick_add-number_button btn-primary btn-large" >+50</button>
+      <label>Quick add amount</label>
+      <div class="btn-toolbar wide-button" id="quick_add-btn_grp">
+        <div class="btn-group">
+          <button id="button-sign" class="btn btn-primary btn-large">+/-</button>
+          <button id="button-add_one" class="btn quick_add-number_button btn-primary btn-large" >+1</button>
+          <button id="button-add_five" class="btn quick_add-number_button btn-primary btn-large" >+5</button>
+          <button id="button-add_ten" class="btn quick_add-number_button btn-primary btn-large" >+10</button>
+          <button id="button-add_fifty" class="btn quick_add-number_button btn-primary btn-large" >+50</button>
+        </div>
       </div>
-    </div>
     
     
-    <label>Date of expense / income</label>
+      <label>Date of expense / income</label>
 
-    <input name =  "datefield" id="transactions-date" class = "input-large datefield" type="text">
-    <br />
-      <button id="transactions-submit" type="submit" class="btn btn-primary btn-large wide-button">Submit</button>
-  </form>
+      <input name =  "datefield" id="transactions-date" class = "input-large datefield" type="text">
+      <br />
+        <button id="transactions-submit" type="submit" class="btn btn-primary btn-large wide-button">Submit</button>
+    </form>
+  </div>
 
 </div>
 
