@@ -11,9 +11,10 @@
 	/* UNIVERSAL STYLES */
 
 .middle {
-	vertical-align:middle;
+	vertical-align:middle !important;
 }
 
+/* SET THE COLORS FOR UP AND DOWN ARROWS */
 .positive {
 	color: #00a0c1 !important;
 }
@@ -22,9 +23,10 @@
 	color: #5d3281 !important;
 }
 
+/* SPECIAL CLASSES FOR ARROWS */
 .arrows {
-	font-size: 1.5em;
-	margin-bottom:50px;
+	font-size: 1.5em !important;
+	margin-bottom:50px !important;
 }
 
 .big {
@@ -32,21 +34,22 @@
 }
 
 .down-unoeight-pix {
-	position: relative;
-	top: 1.8em;
+	position: relative !important;
+	top: 1.8em !important;
 }
 
 .down-deuceuno-pix{
-	position: relative;
-	top: 21px;
+	position: relative !important;
+	top: 21px !important;
 }
 
 .below {
-	overflow: visible;
-	position: relative;
-	top: 65px;
-	left: -120px;
+	overflow: visible !important;
+	position: relative !important;
+	top: 65px !important;
+	left: -120px !important;
 }
+/* --- ARROWS SPECIAL CLASSES END --- */
 
 
 #transactions-amount {
