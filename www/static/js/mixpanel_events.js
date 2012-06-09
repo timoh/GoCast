@@ -18,26 +18,32 @@ jQuery(function($){
 			$("#navbar_collapse-button").click(function() {
 			    mixpanel.track("Navbar Collapse pressed"); 
 			});
-	
-			$("#navbar_landing_page-button-button").click(function() {
-			    mixpanel.track("Navbar Landing page button pressed"); 
-			});
-	
-			$("#navbar_salary-button").click(function() {
-			    mixpanel.track("Navbar Salary button pressed"); 
-			});
-	
-			$("#navbar_transactions-button").click(function() {
-			    mixpanel.track("Navbar Transactions button pressed"); 
-			});
-	
-			$("#navbar_home-button").click(function() {
-			    mixpanel.track("Navbar Home button pressed"); 
-			});
-	
+			
 			$("#navbar_brand-button").click(function() {
 			    mixpanel.track("Navbar Brand button pressed"); 
 			});
+	
+			$("#navbar_").click(function() {
+			    mixpanel.track("Navbar Landing page button pressed"); 
+			});
+	
+			$("#navbar_balance").click(function() {
+			    mixpanel.track("Navbar Salary button pressed"); 
+			});
+	
+			$("#navbar_salary").click(function() {
+			    mixpanel.track("Navbar Salary button pressed"); 
+			});
+	
+			$("#navbar_transactions").click(function() {
+			    mixpanel.track("Navbar Transactions button pressed"); 
+			});
+	
+			$("#navbar_home").click(function() {
+			    mixpanel.track("Navbar Home button pressed"); 
+			});
+	
+
 	
 		/*
 	
@@ -59,7 +65,7 @@ jQuery(function($){
 	
 		*/
 	
-			$("#balance_amount-field").focus(function() {
+			$("#balance-amount").focus(function() {
 			    mixpanel.track("Balance Amount field focused"); 
 			});
 	
@@ -73,11 +79,11 @@ jQuery(function($){
 	
 		*/
 	
-			$("#salary_amount-field").focus(function() {
+			$("#salary-amount").focus(function() {
 			    mixpanel.track("Salary Amount field focused"); 
 			});
 	
-			$("#salary_date-field").focus(function() {
+			$("#salary-date").focus(function() {
 			    mixpanel.track("Salary Date field focused"); 
 			});
 	
@@ -91,16 +97,36 @@ jQuery(function($){
 	
 		*/
 	
-			$("#transactions_amount-field").focus(function() {
+			$("#transactions-amount").focus(function() {
 			    mixpanel.track("Transactions Amount field focused"); 
 			});
 	
-			$("#transactions_date-field").focus(function() {
+			$("#transactions-date").focus(function() {
 			    mixpanel.track("Transactions Date field focused"); 
 			});
 	
 			$("#transactions-submit").submit(function() {
 			    mixpanel.track("Transactions submitted"); 
+			});
+			
+			$("#button-sign").submit(function() {
+			    mixpanel.track("Quick add switch sign button pushed"); 
+			});
+			
+			$("#button-add_one").submit(function() {
+			    mixpanel.track("Quick add button +1 pushed"); 
+			});
+			
+			$("#button-add_five").submit(function() {
+			    mixpanel.track("Quick add button +5 pushed"); 
+			});
+			
+			$("#button-add_ten").submit(function() {
+			    mixpanel.track("Quick add button +10 pushed"); 
+			});
+			
+			$("#button-add_fifty").submit(function() {
+			    mixpanel.track("Quick add button +50 pushed"); 
 			});
 	});
 });
