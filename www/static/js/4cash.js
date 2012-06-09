@@ -1,4 +1,7 @@
 $(document).ready(function () {
+	
+	window.addEventListener("load", function() { window.scrollTo(0, 1); });
+	
 	function update_navbar(){
 		//handles navbar highlighting
 		var a_id = document.location.pathname.replace("/", "navbar_");
