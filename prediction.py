@@ -39,12 +39,12 @@ class Prediction(object):
                 (optionals):
                     We should probably set up a possible confidence settings.
         '''
+        self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
         if Data is None:
             from datetime import datetime
             self.X = self.acquireData(start = datetime(2010,1,1),end = datetime(2011,12,31))
         else:
             self.X = Data
-        self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
         self.preRange = preRange;
         self.predict = np.zeros((self.preRange,self.X.shape[1]))
         self.predictAll = np.zeros((self.preRange,1))
@@ -53,11 +53,8 @@ class Prediction(object):
         from datetime import datetime
         c = connect_db()
         db = c['transactions.users']
-        field_filters = {
-            "user_id": 4,
-            "category": "Entertain"
-        }
-        constrains = {}
+        field_filters = {}
+        constrains = {"user_id":4}
         if start is not None:
             constrains["date"] = {"$gte": start}
 
@@ -65,18 +62,22 @@ class Prediction(object):
             constrains["date"]["$lte"] = end 
         else:
             constrains["date"]["$lte"] = datetime.utcnow()
+        #constrains["user_id"] = 4
 
-        constrains["user_id"] = 4
-
-
-        rows = db.find(constrains)#, field_filters)
-        
-        data = []
-        for row in rows:
-            data.append(row.values())
-            
-        ipdb.set_trace()
-        return np.array(data)
+        # Matrix Generation Code
+        X = np.zeros((365 * 2,4))
+        i = 0
+        for keys in self.categoryClass.keys():
+            constrains["category"] = keys
+            print keys
+            rows = db.find(constrains)
+            data = []
+            for row in rows:
+                data.append(row.values())
+            raw = np.array(data)[:,[0,2]]
+            X[:,i] = raw[:,1].astype(float)
+            i = i + 1
+        return X
 
     def predictSingle(self,B,W,category):
         X = np.concatenate((self.X[-W.shape[0]+1:,self.categoryClass[category]].reshape((1,W.shape[0]-1)),np.ones((1,1))),axis = 1 )
@@ -149,7 +150,7 @@ class Prediction(object):
 
         predict = self.predictSingle(B,W,category)
         self.predict[:,self.categoryClass[category]] = predict
-        visualize = 0
+        visualize = 1
         if visualize:
             import matplotlib.pyplot as plt
             plt.plot(val_y)
@@ -244,8 +245,8 @@ if __name__ == "__main__":
     T = loadmat('ts.mat')
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
-    TestPrediction = Prediction(preRange = 1,Data = Data)
-    TestPrediction.insertFakeData()
+    TestPrediction = Prediction(preRange = 1,Data = None)
+    #TestPrediction.insertFakeData()
     predict_grocery = TestPrediction.model(category = "Grocery")
     predict_entertain = TestPrediction.model(category = "Entertain")
     predict_other = TestPrediction.model(category = "Other")
