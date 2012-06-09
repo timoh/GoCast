@@ -25,6 +25,7 @@
 
 /* SPECIAL CLASSES FOR ARROWS */
 .arrows {
+	margin-left:0.5em !important;
 	font-size: 1.5em !important;
 	margin-bottom:50px !important;
 }
