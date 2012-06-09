@@ -45,7 +45,7 @@ $(function () {
 					forecast[i] = current_balance+all_data[i].amount*Math.random()*0.5-1;
 					
 					/* SHOW THE RESULT OF THE CALCULATION FOR THE DAY */
-					console.log('Balance for day #'+days[i]+' is '+balance[i]);
+					/*console.log('Balance for day #'+days[i]+' is '+balance[i]);*/
 				}
 				
 				
