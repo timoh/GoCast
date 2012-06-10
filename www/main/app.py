@@ -12,7 +12,7 @@ import mjson
 import random
 from bson import ObjectId
 #import rpxtokenurl
-import janrain
+
 
 from datetime import datetime, timedelta
 
@@ -155,6 +155,7 @@ def data_demo():
 
 @main.route("/login", methods = ["GET", "POST"])
 def login():
+    import janrain
     '''handles user login and redirecting to user home page'''
     if request.method == "GET":
         return "I'm ajaxian."
