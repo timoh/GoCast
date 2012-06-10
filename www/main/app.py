@@ -74,6 +74,15 @@ def balance():
     else:
         return render_template("balance.html")
 
+def update_metrics(dt, values):
+    '''updates metrics in usermetrics collection '''
+    day_key = dt.strftime("%Y-%m-%d")
+    g.db.usermetrics.update({"_id": day_key}, 
+        {"$inc": {
+            "daily_balance": values["balance"],
+            "daily_income": values["income"],
+            "daily_expense": values["expense"]}}, True)
+
 @main.route("/transactions", methods = ["GET", "POST"])
 def transactions():
     if request.method == "POST":
@@ -109,9 +118,7 @@ def transactions():
                 "unit" : -1,
                 "amount" : -1 
             }
-
-        add_doc("transactions", 
-            {
+        doc = {
                 "datetime" : dt_string,
                 "user_id" : user_id,
                 "amount": float(trns["amount"]),
@@ -124,9 +131,16 @@ def transactions():
                 "recurrence": recurrence,
                 "category" : "cat{0}".format(random.randint(1, 10)),
                 "added" :  datetime.utcnow()
-            })
-        return render_template("transactions.html")
+            }
+        add_doc("transactions", doc)
 
+        values = {
+            "balance": doc["amount"],
+            "income": doc["amount"] if doc["income"] == True else 0.0,
+            "outcome": doc["amount"] if doc["income"] == True else 0.0
+        }
+        update_metrics(doc["datetime"], values)
+        
     return render_template("transactions.html")
 
 @main.route("/transactions/view", methods = ["GET"])

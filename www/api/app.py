@@ -118,7 +118,7 @@ def user_metrics(uid):
 
     ends = datetime.utcnow() 
     ends -= timedelta(hours = ends.hour, minutes = ends.minute)
-    starts = ends - timedelta(days = 30)
+    starts = ends - timedelta(days = 120)
 
     if request.args.has_key("starts"):
         try:
