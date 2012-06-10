@@ -1,6 +1,25 @@
 $(document).ready(function () {
 	
+	//scrolls down away from address bar to make a more webapp like feel on iPhone
 	window.addEventListener("load", function() { window.scrollTo(0, 1); });
+	
+	$('#recurring-group').hide();
+	var recurring = false;
+	
+	
+	$('#recurring-checkbox').click(function(e){
+		if (recurring == false){
+			$('#recurring-group').slideDown('slow');
+			recurring = true;
+		} else if (recurring == true){
+			$('#recurring-group').slideUp('slow');
+			$('#recurrence-amount').val(''); //empty recurrence-amount
+			recurring = false;
+		} else {
+			console.warn('Logic error in recurring checkbox jQuery!');
+		}
+	});
+	
 	
 	function update_navbar(){
 		//handles navbar highlighting
