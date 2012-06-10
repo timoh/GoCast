@@ -170,7 +170,12 @@ class Prediction(object):
         '''
             Grocery,Entertain,Other,Schedule
         '''
-        grocery = np.random.normal(10,2,365 * 2) # mu = 10 EUR, sigma = 2
+        ipdb.set_trace()
+        grocery = np.random.normal(5,3,365 * 2) # mu = 10 EUR, sigma = 2
+        sample = np.zeros((7,1))
+        sample[:,0] = [50,40,20,20,20,20,20]
+        sample = np.repeat(sample,105,axis = 0)
+        sample = sample[:,:730].copy()
         entertain = np.zeros(grocery.shape)
         Raw = np.random.normal(50,20, ( 365 * 2 / 7 ) * 2)
         j = 5
@@ -294,6 +299,9 @@ class Prediction(object):
         GoalGather = sum( daily_allowance ) / Goal_diff
         return GoalGather,daily_allowance[:actual_transactions.shape[0]]
 
+    def simplePredictor(self):
+        return
+
 
 if __name__ == "__main__":
     import numpy as np
@@ -303,6 +311,6 @@ if __name__ == "__main__":
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
     TestPrediction = Prediction(preRange = 31,Data = None)
-    #TestPrediction.insertFakeData()
+    TestPrediction.insertFakeData()
     #predict_all = TestPrediction.predictOverAll()
-    [GoalGather,daily_allowance] = TestPrediction.forcast(Goal = 500,day = 31,month = 1, year = 2012, howManyDay = 30)
+    #[GoalGather,daily_allowance] = TestPrediction.forcast(Goal = 500,day = 31,month = 1, year = 2012, howManyDay = 30)
