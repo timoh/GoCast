@@ -11,6 +11,10 @@
     <p>Start adding expenses or income!</p>
   
     <form method = "POST">
+      
+      <label>Date of expense / income</label>
+      <input name="datefield" id="transactions-date" class="input-large datefield" type="text">
+      
       <label>Amount of money spent / earned</label>
         <p style="float:left;">&dollar; &nbsp;</p>
       <input name="amount" id="transactions-amount" type="text" class="input-large" placeholder="ex. 0.00">
@@ -34,11 +38,28 @@
         <option value="0" selected="selected">Groceries</option>
         <option value="1">Entertainment</option>
       </select>
+      
+      <label>Recurring</label>
+      <input type="checkbox" id="recurring-checkbox" value="recurring">
+      
+      <div id="recurring-group">
+        <label>Recurrence</label>
+        <input id="recurrence-amount" type="text">
+      
+        <label>Times per</label>
+        <select id="recurring-times-per-select">
+          <option value="0">week</option>
+          <option value="1" selected="selected">month</option>
+          <option value="2">quarter</option>
+          <option value="3">year</option>
+        </select>
+      
+        <label>This transaction will recur</label>
+        <input id="recurrence-amount" type="text">
+        <label>..times</label>
+      </div>
     
-    
-      <label>Date of expense / income</label>
-
-      <input name="datefield" id="transactions-date" class="input-large datefield" type="text">
+      
       <br />
         <button id="transactions-submit" type="submit" class="btn btn-primary btn-large ">Submit</button>
     </form>

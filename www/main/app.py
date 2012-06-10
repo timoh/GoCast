@@ -12,7 +12,7 @@ import mjson
 import random
 from bson import ObjectId
 #import rpxtokenurl
-import janrain
+
 
 from datetime import datetime, timedelta
 
@@ -43,15 +43,15 @@ def remove_redundant_keys(d, keys):
 @main.route("/", methods = ["GET"])
 def index():
     print session.get("user_id")
-    return render_template("main.html", is_logged = session.has_key("user_id"))
+    return render_template("main.html")
 
 @main.route("/home", methods = ["GET"])
 def home():
-    return render_template("home.html", is_logged = session.has_key("user_id"))
+    return render_template("home.html")
 
 @main.route("/team", methods = ["GET"])
 def team():
-    return render_template("team.html", is_logged = session.has_key("user_id"))
+    return render_template("team.html")
 
 def add_doc(collection, doc = None):
     if doc is not None:
@@ -151,25 +151,11 @@ def data_demo():
         "val":  random.randint(1, 20)}
     return jsonify(arr)
 
-@main.route("/channel", methods = ["GET"])
-def channel():
-    '''
-    servers channel file for FB JS sdk.
-    read more: https://developers.facebook.com/docs/reference/javascript/
-    '''
-    cache_expire = 60 * 60 * 24 * 365
-    expiration_date = datetime.utcnow() + timedelta(seconds = cache_expire)
-    response = make_response(render_template("channel.html"))
-    response.headers["Pragma"] = "public"
-    response.headers["Cache-Control"] = "max-age={0}".format(cache_expire)
-    response.headers["Expires"] = expiration_date.strftime("%a, %d %m %Y %H:%M:%S")
-  
-    return response
-
 #login and logout functions
 
 @main.route("/login", methods = ["GET", "POST"])
 def login():
+    import janrain
     '''handles user login and redirecting to user home page'''
     if request.method == "GET":
         return "I'm ajaxian."
@@ -180,7 +166,7 @@ def login():
         
         #does this user exists in db,ifnot then adds
         user_id = signup(user_info)
-        session["user_id"] = user_id
+        
         #redirect to users homepage
         print "Logged user id: ", user_id
         if user_id:
@@ -194,7 +180,8 @@ def login():
 
 @main.route("/logout", methods = ["GET"])
 def logout():
-    session.pop("username", None)
+    session.pop("user_id", None)
+    session.pop("user", None)
     return redirect(url_for("main.index"))
 
 def signup(user_info):
@@ -202,13 +189,21 @@ def signup(user_info):
     #does this user exists in db
     user_id = None
     user = g.db.users.find_one({"identifier": user_info["identifier"]})
+    #set
     #if yes return user id
-    if user:
-        user_id = user["_id"]
-    else:
+    if user is None:
         user_id = add_new_user(user_info)
+        user = g.db.users.find_one({"_id": user_id})
 
-    return user_id
+    #set global & session values
+    session["user"] = {
+        "is_session_active": True,
+        "user_id": user["_id"],
+        "name": "{0} {1}".format(user["first_name"], user["last_name"]),
+        "headline" : user["headline"]
+        }
+    
+    return user["_id"]
 
 def add_new_user(user_info):
     '''creates new user profile into db'''
