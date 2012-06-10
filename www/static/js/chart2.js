@@ -34,13 +34,13 @@ $(function () {
 				/* GENERATE ARRAYS FOR DIFFERENT DATASETS FOR A SPECIFIC DATE RANGE */
 				console.log('------ BUILDING START ------');
 
-				var exists1 = new Date;
+				/*var exists1 = new Date;
 				var exists2 = new Date;
 				exists1.setTime(1338768000000);
 				exists2.setTime(1339027200000);
 
 				console.log('Should find value -150 for in expenses for '+formatDateForHighCharts(exists1));
-				console.log('Should find value -135 for in expenses for '+formatDateForHighCharts(exists2));
+				console.log('Should find value -135 for in expenses for '+formatDateForHighCharts(exists2));*/
 
 				expenses = buildDataForHighCharts(all_data.daily_expenses, date_range, 'expenses');
 				income = buildDataForHighCharts(all_data.daily_incomes, date_range, 'income');
