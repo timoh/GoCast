@@ -8,6 +8,7 @@ import warnings
 from www.app import init_settings
 from datetime import datetime
 from calendar import monthrange
+import matplotlib.pyplot as plt
 
 def connect_db():
     import pymongo
@@ -132,9 +133,9 @@ class Prediction(object):
 
     def SplitData(self,category):
         raw = self.X[:,self.categoryClass[category]]
-        X = np.zeros((1,9 * self.preRange))
-        Y = np.zeros((1, self.preRange))
         if self.X.shape[0]  >= self.preRange * 10 :
+            X = np.zeros((1,9 * self.preRange))
+            Y = np.zeros((1, self.preRange))
             for i in xrange(0,self.X.shape[0] - self.preRange * 10):
                 X = np.vstack((X,raw[i:i+9*self.preRange].reshape((1,9*self.preRange))))
                 Y = np.vstack((Y,raw[i+9*self.preRange:i+10*self.preRange].reshape((1,self.preRange))))
@@ -142,7 +143,13 @@ class Prediction(object):
             warnings.warn("More data shall be added or what? I feel like not analyzing you. :/")
             warnings.warn("The data is probably not sufficient enough for the prediction.")
             warnings.warn("The maximum we can do is to predict %f"%(self.X.shape[0]/4))
-            raise IndexError
+            warnings.warn("Anyway, I will produce a predictor based on the existing data")
+            X = np.zeros((1,self.preRange))
+            Y = np.zeros((1,self.preRange))
+            ipdb.set_trace()
+            for i in xrange(0,self.X.shape[0] - self.preRange * 1):
+                X = np.vstack((X,raw[i:i+ 1 * self.preRange].reshape((1,self.preRange))))
+                Y = np.vstack((Y,raw[i+1 * self.preRange:i+ 2 * self.preRange].reshape((1,self.preRange))))
         X = X[1:,:].copy()
         Y = Y[1:,:].copy()
 
@@ -192,7 +199,8 @@ class Prediction(object):
         entertain = sample + np.random.normal(10,1,365 * 2 + 31)
         other = np.zeros(grocery.shape)
         #other = np.multiply(np.random.binomial(1,0.1,365 * 2),np.random.normal(50,10,365 * 2))
-        other = grocery.copy()
+        idx = np.random.permutation(grocery.shape[0])
+        other = np.multiplay(np.random.rand(1,0.1,365 * 2 + 31),grocery[idx,:])
         schedule = np.zeros(grocery.shape)
         noDay = []
         for i in xrange(1,13):
@@ -202,7 +210,7 @@ class Prediction(object):
         noDay = np.hstack((noDay,noDay))
         noDay = np.hstack((noDay,31))
         schedule_event = {
-                "salary":[3000,15],
+                "salary":[6000,15],
                 "rent":[-800,6],
                 "telephone":[-40,13],
                 "internet":[-40,6],
@@ -277,20 +285,20 @@ class Prediction(object):
                 "Entertain":prediction_month[:,1],
                 "Other":prediction_month[:,2],
                 "Schedule":prediction_month[:,3]}
-        for date in xrange(1,noDay+1):
+        for date in xrange(0,noDay):
             for category in Data.keys():
                 transaction_doc = {
                         "user_id": "Prediction",
                         "category": category,
-                        "amount": Data[category][date - 1],
-                        "date": datetime(year,month,date)
+                        "amount": Data[category][date],
+                        "date": datetime(year,month,date + 1)
                         }
                 db_transaction.users.insert(transaction_doc)
                 print "Successfully Inserted document: %s"% transaction_doc
         return None
 
 
-    def forcast(self,Goal,day = None, month = None,year = None,howManyDay = None):
+    def forcast(self,Goal,day = None, month = None,year = None):
         '''
         # Get the current Date
         # Predict the future remaining Date
@@ -306,23 +314,25 @@ class Prediction(object):
             month = datetime.now().month
         if year is None:
             year = 2012
-        if howManyDay is None:
-            howManyDay = 20
-        [temp, noDay] = monthrange(year,month)
-        self.preRange = noDay
-        [prediction_month, prediction_month_detail]= self.predictOverAll() # Fix this function --> Include the single predictions
-        #self.PredictionDataInsertion(prediction_month_detail,month,year,noDay)
-        if howManyDay == 0:
-            howManyDay = noDay - 1
-        Goal_diff = prediction_month[howManyDay] - Goal
-        daily_allowance = np.zeros((noDay,1))
-        actual_transactions = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
-        actual_transactions = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,actual_transactions,self.std_X)
-        actual_transactions = np.apply_along_axis(lambda x,m:np.add(x,m),1,actual_transactions,self.mean_X)
-        A = np.sum(actual_transactions,1) - prediction_month[actual_transactions.shape[0]]
-        daily_allowance[:A.shape[0],0] = A
-        GoalGather = sum( daily_allowance ) / Goal_diff
-        return GoalGather,daily_allowance[:actual_transactions.shape[0]]
+        self.preRange = day
+        [prediction, prediction_detail]= self.predictOverAll() # Fix this function --> Include the single predictions
+        self.PredictionDataInsertion(prediction_detail,month,year,day)
+        produce_daily_allowance = 0
+        if produce_daily_allowance:
+            if howManyDay == 0:
+                howManyDay = Total - 1
+            Goal_diff = prediction[howManyDay] - Goal
+            print prediction[howManyDay]
+            daily_allowance = np.zeros((HowManyDay,1))
+            actual_transactions = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
+            actual_transactions = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,actual_transactions,self.std_X)
+            actual_transactions = np.apply_along_axis(lambda x,m:np.add(x,m),1,actual_transactions,self.mean_X)
+            A = np.sum(actual_transactions,1) - prediction[actual_transactions.shape[0]]
+            daily_allowance[:A.shape[0],0] = A
+            GoalGather = sum( daily_allowance ) / Goal_diff
+            return GoalGather,daily_allowance[:actual_transactions.shape[0]]
+        else:
+            return None
 
     def simplePredictor(self):
         return
@@ -335,10 +345,18 @@ if __name__ == "__main__":
     T = loadmat('ts.mat')
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
-    TestPrediction = Prediction(preRange = 31,Data = None)
+    noDay = []
+    for i in xrange(1,13):
+        [temp,month_day] = monthrange(2012,i)
+        noDay.append(month_day)
+    noDay = np.array(noDay)
+    for i in xrange(1,13):
+        print "day %f,month %f"%(noDay[i-1],i)
+        TestPrediction = Prediction(preRange = noDay[i-1],Data = None)
+        TestPrediction.forcast(Goal = 5000,day = noDay[i-1],month = i, year = 2012)
+        del TestPrediction
     #TestPrediction.insertFakeData()
     #for keys in TestPrediction.categoryClass.keys():
     #    predict = TestPrediction.model(keys)
     #predict_all = TestPrediction.predictOverAll()
-    [GoalGather,daily_allowance] = TestPrediction.forcast(Goal = 500,day = 31,month = 1, year = 2012, howManyDay = 30)
-    print GoalGather,daily_allowance
+    #print GoalGather,daily_allowance
