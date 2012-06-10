@@ -175,8 +175,10 @@ class Prediction(object):
             import matplotlib.pyplot as plt
             plt.plot(val_y[:,0])
             plt.plot(val_t[:,0],'r--')
-            plt.ylabel('Something')
+            plt.ylabel('Balance')
+            plt.xlabel('Time')
             plt.show()
+            #plt.savefig('Validation')
         return predict
 
     def mysigmoid(self,x):
@@ -197,10 +199,11 @@ class Prediction(object):
         sample = np.repeat(sample,109,axis = 1)
         sample = sample.flatten('F')[:761]
         entertain = sample + np.random.normal(10,1,365 * 2 + 31)
+        #ipdb.set_trace()
         other = np.zeros(grocery.shape)
         #other = np.multiply(np.random.binomial(1,0.1,365 * 2),np.random.normal(50,10,365 * 2))
         idx = np.random.permutation(grocery.shape[0])
-        other = np.multiplay(np.random.rand(1,0.1,365 * 2 + 31),grocery[idx,:])
+        other = np.multiply(np.random.normal(1,0.1,365 * 2 + 31),grocery[idx,:])
         schedule = np.zeros(grocery.shape)
         noDay = []
         for i in xrange(1,13):
@@ -240,7 +243,6 @@ class Prediction(object):
             sys.exit(1)
 
         db_transaction = c['transactions']
-        '''
         for year in [2010,2011]:
             for month in xrange(1,13):
                 for date in xrange(1,noDay[month-1]+1):
@@ -255,8 +257,8 @@ class Prediction(object):
                                 "date": datetime(year,month,date)
                                 }
                         db_transaction.users.insert(transaction_doc,safe = True)
-                        print "Successfully Inserted documents"
-        '''
+                        print "Successfully Inserted document %s"%(transaction_doc)
+
         for year in [2012]:
             for month in xrange(1,2):
                 for date in xrange(1,noDay[-1]):
@@ -298,7 +300,7 @@ class Prediction(object):
         return None
 
 
-    def forcast(self,Goal,day = None, month = None,year = None):
+    def forcast(self,Goal,day = None, month = None,year = None, produce_daily_allowance = 0):
         '''
         # Get the current Date
         # Predict the future remaining Date
@@ -316,8 +318,7 @@ class Prediction(object):
             year = 2012
         self.preRange = day
         [prediction, prediction_detail]= self.predictOverAll() # Fix this function --> Include the single predictions
-        self.PredictionDataInsertion(prediction_detail,month,year,day)
-        produce_daily_allowance = 0
+    #    self.PredictionDataInsertion(prediction_detail,month,year,day)
         if produce_daily_allowance:
             if howManyDay == 0:
                 howManyDay = Total - 1
@@ -327,15 +328,32 @@ class Prediction(object):
             actual_transactions = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
             actual_transactions = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,actual_transactions,self.std_X)
             actual_transactions = np.apply_along_axis(lambda x,m:np.add(x,m),1,actual_transactions,self.mean_X)
-            A = np.sum(actual_transactions,1) - prediction[actual_transactions.shape[0]]
-            daily_allowance[:A.shape[0],0] = A
-            GoalGather = sum( daily_allowance ) / Goal_diff
-            return GoalGather,daily_allowance[:actual_transactions.shape[0]]
+            self.daily_allowance = np.sum(actual_transactions,1) - prediction[actual_transactions.shape[0]]
+            self.GoalGather = sum( daily_allowance ) / Goal_diff
+            return None
         else:
             return None
 
-    def simplePredictor(self):
-        return
+    def simpleGraph(self):
+        Old = self.X[-200:,:]
+        Old = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,Old,self.std_X)
+        Old = np.apply_along_axis(lambda x,m:np.add(x,m),1,Old,self.mean_X)
+        Predict = self.predict
+        #Predict = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,Predict,self.std_X)
+        #Predict = np.apply_along_axis(lambda x,m:np.add(x,m),1,Predict,self.mean_X)
+        np.savetxt('Validation.txt',Old)
+        np.savetxt('Prediction.txt',Predict)
+        trans = self.actual_trans(2012,1,31)
+        np.savetxt('Actual.txt',trans)
+
+        return None
+    
+    def actual_trans(self,year,month,day):
+        trans = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
+        trans = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,trans,self.std_X)
+        trans = np.apply_along_axis(lambda x,m:np.add(x,m),1,trans,self.mean_X)
+
+        return trans
 
 
 if __name__ == "__main__":
@@ -346,15 +364,20 @@ if __name__ == "__main__":
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
     noDay = []
+    TestPrediction = Prediction(preRange = 31,Data = None)
     for i in xrange(1,13):
         [temp,month_day] = monthrange(2012,i)
         noDay.append(month_day)
     noDay = np.array(noDay)
-    for i in xrange(1,13):
-        print "day %f,month %f"%(noDay[i-1],i)
-        TestPrediction = Prediction(preRange = noDay[i-1],Data = None)
-        TestPrediction.forcast(Goal = 5000,day = noDay[i-1],month = i, year = 2012)
-        del TestPrediction
+    for i in xrange(1,2):
+        TestPrediction.forcast(Goal = 5000,day = noDay[i-1],month = i,year = 2012, produce_daily_allowance = 0)
+    TestPrediction.simpleGraph()
+    TestPrediction.model('Grocery')
+    #for i in xrange(1,13):
+    #    print "day %f,month %f"%(noDay[i-1],i)
+    #    TestPrediction = Prediction(preRange = noDay[i-1],Data = None)
+    #    TestPrediction.forcast(Goal = 5000,day = noDay[i-1],month = i, year = 2012, produce_daily_allowance = 0 )
+    #    del TestPrediction
     #TestPrediction.insertFakeData()
     #for keys in TestPrediction.categoryClass.keys():
     #    predict = TestPrediction.model(keys)
