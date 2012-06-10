@@ -55,7 +55,7 @@ $(function () {
                 text: 'Your Cashflow Forecast'
             },
             xAxis: {
-                categories: date_range_strings
+                categories: date_range_string
             },
             tooltip: {
                 formatter: function() {
