@@ -74,11 +74,74 @@ def index(tid = None):
         return error("You are too mysterious.[Wrong HTTP method.]")
 
 
+#TODO: refactor
+def get_predictions(user_id, starts, ends):
+    data = {}
+
+    #get all different topics
+    table = g.db["transactions"]["users"]
+    cats = set([doc['category'] for doc in table.find({},{"category": 1})])
+    print cats
+    for cat in cats:
+        key = "pred_{0}".format(cat)
+        print starts, ends, ":"
+        print table.find({
+                    "user_id": user_id,
+                    "datetime": {
+                        "$gte" : starts,
+                        "$lte" : ends}
+                    },
+                    {
+                    "datetime" :  1,
+                    "amount": 1
+                    }).count()
+        
+        #data[key] = [(doc["datetime"], doc["amount"]) for doc in docs]
+
 @api.route("/api/userstats/<uid>", methods = ["GET"])
 def users_stat(uid = 0):
     user = g.db["users_stat"].find_one({"$or": 
             [{"user_id": uid}, {"user_id": int(uid)}]})
+    if uid == 1:
+        uid = 4
+    #user.update(
+    print user["starts"], user["ends"]
+    get_predictions(uid, user["starts"], user["ends"])
     if user is None:
         return error("User with given id `{0}` dont exist in database.".format(uid))
     else:
         return mjson.mongo_dumps(user)
+
+@api.route("/api/usermetrics/<uid>", methods = ["GET"])
+def user_metrics(uid):
+    from datetime import datetime, timedelta
+
+    ends = datetime.utcnow() 
+    ends -= timedelta(hours = ends.hour, minutes = ends.minute)
+    starts = ends - timedelta(days = 30)
+
+    if request.args.has_key("starts"):
+        try:
+            datetime.strptime(request.args["starts"], "%Y-%m-%d")
+        except:
+            print "wrong date format: `{0}`".format({request.args[starts]})
+
+    if request.args.has_key("ends"):
+        try:
+            datetime.strptime(request.args["ends"], "%Y-%m-%d")
+        except:
+            print "wrong date format: `{0}`".format({request.args[ends]})
+
+    docs = list(g.db["usermetrics"].find({
+            "$or": [{"user_id": uid}, {"user_id": int(uid)}],
+            "datetime": {"$gt": starts, "$lte" : ends}}))
+    
+    data = {
+        "user_id": uid,
+        "dates":[doc["_id"] for doc in docs],
+        "daily_balances":   [doc["daily_balance"] for doc in docs],
+        "daily_incomes":    [doc["daily_income"] for doc in docs],
+        "daily_expenses":   [doc["daily_expense"] for doc in docs],
+        }
+
+    return jsonify(data)

@@ -4,8 +4,58 @@ Runs map/reduce like job against mongodb.
 
 from collections import defaultdict
 from prediction import connect_db
-from datetime import datetime
+from datetime import datetime, timedelta
 from pprint import pprint
+
+def calc_sum(coll):
+    result = 0.0
+    if coll is None:
+        result
+    for item in coll:
+        result += float(item)
+    return result
+
+
+def calc_daily_value(db, contraints = {}):
+    '''Calcs user metrics for every day'''
+    #get users daily transactions and sum together
+    docs = db["transactions"].find(contraints, {"amount" : 1})
+    coll = [float(doc["amount"]) for doc in docs]
+    return calc_sum(coll)
+
+def calc_daily_metrics(db, user_id,  starts, ends):
+    
+    balances = []
+    incomes = []
+    expenses = []
+    days = (ends - starts).days
+    today = starts - timedelta(hours = ends.hour, minutes = ends.minute) #to midnight
+    constraints = {
+        "user_id": user_id,
+        "datetime": {}
+    }
+
+    for day in xrange(days):
+        tomorrow = today  + timedelta(days = 1)
+        constraints= {"datetime": {"$gte": today, "$lte": tomorrow}}
+        balance = calc_daily_value(db, constraints)
+        
+        constraints["income"] = True
+        income = calc_daily_value(db, constraints)
+
+        constraints["income"]= False
+        expense = calc_daily_value(db, constraints)
+        db["usermetrics"].insert({
+            "_id" : today.strftime("%Y-%m-%d"),
+            "datetime": today, 
+            "user_id" : user_id,
+            "daily_balance": balance,
+            "daily_income" : income,
+            "daily_expense": expense
+            })
+
+        today = tomorrow
+
 
 
 def daily_total(db, constraints = {}):
