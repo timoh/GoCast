@@ -11,13 +11,14 @@
     <p>Start adding expenses or income!</p>
   
     <form method = "POST">
-      
+
       <label>Date of expense / income</label>
       <input name="datefield" id="transactions-date" class="input-large datefield" type="text">
       
       <label>Amount of money spent / earned</label>
         <p style="float:left;">&dollar; &nbsp;</p>
-      <input name="amount" id="transactions-amount" type="text" class="input-large" placeholder="ex. 0.00">
+      <input name="amount" id="transactions-amount" type="text" 
+          class="input-large" value = "0" placeholder="ex. 0.00">
       <div style="float:clear;"></div>
     
       <label>Quick add amount</label>
@@ -32,7 +33,7 @@
       </div>
       
       <label>Category</label>
-      <select id="category-select">
+      <select name = "category" id="category-select">
         <option value="3">Scheduled</option>
         <option value="2">Other</option>
         <option value="0" selected="selected">Groceries</option>
@@ -40,14 +41,14 @@
       </select>
       
       <label>Recurring</label>
-      <input type="checkbox" id="recurring-checkbox" value="recurring">
+      <input name = "recurring" type="checkbox" id="recurring-checkbox" value="1" />
       
       <div id="recurring-group">
         <label>Recurrence</label>
-        <input id="recurrence-amount" type="text">
+        <input name = "recurrence-freq" id="recurrence-amount" type="text">
       
         <label>Times per</label>
-        <select id="recurring-times-per-select">
+        <select name = "recurrence-unit" id="recurring-times-per-select">
           <option value="0">week</option>
           <option value="1" selected="selected">month</option>
           <option value="2">quarter</option>
@@ -55,7 +56,7 @@
         </select>
       
         <label>This transaction will recur</label>
-        <input id="recurrence-amount" type="text">
+        <input name = "recurrence-amount" id="recurrence-amount" type="text">
         <label>..times</label>
       </div>
     

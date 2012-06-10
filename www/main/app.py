@@ -83,24 +83,45 @@ def transactions():
         
         trns = request.form
         
-        if trns.has_key("datefield"):
-            dt_string = datetime.utcnow()
+        if trns.has_key("datefield"):   
             dt_string = datetime.strptime(trns["datefield"], "%m/%d/%Y")
         else: 
             dt_string = datetime.utcnow()
 
-        print trns["amount"]
+        print session
+        if(session.has_key("user")):
+            user_id = session["user"]["user_id"]
+        else:
+            user_id = 1
+
+        print request.form 
+        if request.form.has_key("recurring"):
+            recurrence = {
+                "recurring" : True,
+                "freq": trns["recurrence-freq"],
+                "unit" : trns["recurrence-unit"],
+                "amount" : trns["recurrence-amount"] 
+            }
+        else:
+            recurrence = {
+                "recurring" : False,
+                "freq": -1,
+                "unit" : -1,
+                "amount" : -1 
+            }
+
         add_doc("transactions", 
             {
                 "datetime" : dt_string,
-                "user_id" : 1,
+                "user_id" : user_id,
                 "amount": float(trns["amount"]),
                 "income": float(trns["amount"]) > 0,
-                "regular": False, #trns["is_regular"],
+                #"regular": trns["is_regular"],
                 "currency": {
                     "symbol" : "EUR",
                     "value" : 1.0
                 },
+                "recurrence": recurrence,
                 "category" : "cat{0}".format(random.randint(1, 10)),
                 "added" :  datetime.utcnow()
             })
@@ -152,6 +173,7 @@ def data_demo():
     return jsonify(arr)
 
 #login and logout functions
+#TODO: clean namespaces and imports
 
 @main.route("/login", methods = ["GET", "POST"])
 def login():
@@ -180,7 +202,6 @@ def login():
 
 @main.route("/logout", methods = ["GET"])
 def logout():
-    session.pop("user_id", None)
     session.pop("user", None)
     return redirect(url_for("main.index"))
 
