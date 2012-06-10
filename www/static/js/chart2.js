@@ -21,7 +21,7 @@ $(function () {
 			*		income (bar chart, positive)
 			*		expenses (bar chart, negative)
 			*		balance (areaspline)
-			*		forecast (areaspline)
+			*		forecast (areaspline) TODO TODO TODO !!!!!!!!!
 			*
 			*/
 			$.getJSON('api/userstats/1', function(data){
@@ -31,6 +31,25 @@ $(function () {
 				/* GENERATE DATE RANGE (x-axis)*/
 				date_range = generateDateRange(all_data);
 				
+				/* GENERATE ARRAYS FOR DIFFERENT DATASETS FOR A SPECIFIC DATE RANGE */
+				console.log('------ BUILDING START ------');
+				
+				var exists1 = new Date;
+				var exists2 = new Date;
+				exists1.setTime(1338768000000);
+				exists2.setTime(1339027200000);
+				
+				console.log('Should find value -150 for in expenses for '+formatDateForHighCharts(exists1));
+				console.log('Should find value -135 for in expenses for '+formatDateForHighCharts(exists2));
+				
+				expenses = buildDataForHighCharts(all_data.daily_expenses, date_range, 'expenses');
+				income = buildDataForHighCharts(all_data.daily_incomes, date_range, 'income');
+				balance = buildDataForHighCharts(all_data.daily_balances, date_range, 'balance');
+				
+				/* needs actual forecast data!!! */
+				forecast = buildDataForHighCharts(all_data.daily_balances, date_range, 'forecast');
+				
+				console.log('------ BUILDING COMPLETE !!!! ------');
 				
 				/* FINALLY, CALL THE HIGHCHARTS DRAW FUNCTION */
 				drawChart();
@@ -38,39 +57,10 @@ $(function () {
 			
 			var generateDateRange = function(dateObject){
 				
-				/* SET UP THE DATE RANGE
-				*		1. FIND THE SMALLEST VALUE
-				*		2. FIND THE BIGGEST VALUE
-				*		3. FILL IN EVERY DAY IN BETWEEN
-				*		RESULT: ARRAY WITH THE DATE RANGE
-				*/	
-				
-				console.log('DAILY EXPENSES:');
-				iterateDates(dateObject.daily_expenses);
-				console.log('---- END -----');
-				
-				
-				console.log('DAILY INCOMES:');
-				iterateDates(dateObject.daily_incomes);
-				console.log('---- END -----');
-				
-				console.log('DAILY BALANCES:');
-				iterateDates(dateObject.daily_balances);
-				console.log('---- END -----');
-				
-				/* BUILD ARRAY OF DATES BASED ON BIGGEST AND SMALLEST DAYS */
-				console.log('PRINTING DATE RANGE');
-				
-				console.log('SMALLEST');
-				console.log(smallest_day);
-				
-				console.log('BIGGEST');
-				console.log(biggest_day);
-				
-				console.log('---- END -----');
-				
-				console.log('date_range definition:');
-				console.log(date_range);
+				/* PRODUCES A DATE RANGE */
+				iterateDates(dateObject.daily_expenses, 'expenses');
+				iterateDates(dateObject.daily_incomes, 'incomes');
+				iterateDates(dateObject.daily_balances, 'balances');
 				
 				if(date_range.length == 0){
 					date_range.push(smallest_day);
@@ -79,7 +69,7 @@ $(function () {
 				}
 				
 				while (date_range[date_range.length-1] < biggest_day) {
-					console.log('Date range length is: '+date_range.length);
+					//console.log('Date range length is: '+date_range.length);
 					
 					var previous_day = date_range[date_range.length-1];
 					
@@ -92,9 +82,11 @@ $(function () {
 					
 					date_range.push(created_day);
 					
-					console.log('ADDED NEW ELEMENT TO DATE RANGE:');
-					console.log(date_range[date_range.length-1]);
+					
+					
 				}
+				console.log('DATE RANGE:');
+				console.log(date_range);
 				
 				/* FORMAT DATE OBJECTS INTO STRINGS FOR HIGHCHARTS */
 				for (date in date_range) {
@@ -104,18 +96,54 @@ $(function () {
 				console.log('Date range string:');
 				console.log(date_range_string);
 				
+				return date_range_string;
+				
 			}
 			
 			var formatDateForHighCharts = function(dateObject){
 				return dateObject.getFullYear()+'-'+dateObject.getMonth()+'-'+dateObject.getDate();
 			}
-			
-			var iterateDates = function(expenseCategory){
+
+			var buildDataForHighCharts = function(arrayOfValues, dateRange, nameOfDataSet){
+				console.log('START BUILDING ***'+nameOfDataSet+'*** !!!! ------')
+				var array_to_return = new Array; //array with zeros in place
 				
+				for (iterator in dateRange) {
+					/* LOOP THROUGH DATES */
+					var found = false; //reset for each date
+					console.log('Checking if data for '+dateRange[iterator]+' is found');
+					 
+						for(i in arrayOfValues){
+							/* LOOP THROGH VALUES FOR EACH DATE */
+							var temp_date = new Date();
+							temp_date.setTime(arrayOfValues[i][0].$date); //create comparable date
+							
+							if(formatDateForHighCharts(temp_date) === dateRange[iterator]){
+								/* IF A MATCHING DATE IS FOUND, MEANS THAT THERE IS DATA FOR THIS DAY */
+								console.log('Value for '+dateRange[iterator]+' in dataset'+nameOfDataSet+' is '+arrayOfValues[i][1]);
+								found = true; //make sure no zeros are put in wrong places
+								array_to_return.push(arrayOfValues[i][1]); //add value to array
+							} 
+						}
+					
+						if (found == false) {
+							//console.log('No data for '+dateRange[iterator]+' in dataset'+nameOfDataSet+'  was found! Adding zero.');
+							/* NO DATA FOR THIS DAY WAS FOUND */
+							array_to_return.push(0); //insert zero because no data is found
+						}
+				}
+				
+				/* DONE & DONE! */
+				console.log('Building ***'+nameOfDataSet+'*** complete!');
+				console.log(array_to_return);
+				return array_to_return /* ARRAY OF VALUES */
+			}
+			
+			var iterateDates = function(expenseCategory, categoryName){
+				console.log('Now iterating over '+categoryName);
 				var date_range_array = new Array;
 				
 				for (day in expenseCategory) {
-					console.log('Now on iteration #'+day)
 					var new_day = new Date();
 					
 					new_day.setTime(expenseCategory[day][0].$date);
@@ -132,16 +160,18 @@ $(function () {
 					
 					if (new_day < smallest_day) { /* SMALLER THAN CURRENTLY SMALLEST? */
 						smallest_day = new_day;
-						console.log('New smallest day found!');
-						console.log(smallest_day);
+						//console.log('New smallest day found!');
+						//console.log(smallest_day);
 					} else if (new_day > biggest_day) { /* BIGGER THAN CURRENTLY BIGGEST? */
 						biggest_day = new_day;
-						console.log('New biggest day found!');
-						console.log(biggest_day);
+						//console.log('New biggest day found!');
+						//console.log(biggest_day);
 					} else {
-						console.log('Same old, same old!');
+						//console.log('Same old, same old!');
 					}
 					
+					console.log('Completed iterating over '+categoryName+'. Date range is:');
+					console.log(date_range_array);
 					return date_range_array;
 					
 				}
