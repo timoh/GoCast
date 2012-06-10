@@ -42,6 +42,8 @@ class Prediction(object):
                     We should probably set up a possible confidence settings.
         '''
         self.categoryClass = {"Grocery":0,"Entertain":1,"Other":2,"Schedule":3}
+        self.mean_X = None
+        self.std_X = None
         if Data is None:
             self.X = self.acquireData(start = datetime(2010,1,1),end = datetime(2011,12,31))
         else:
@@ -65,7 +67,7 @@ class Prediction(object):
         #constrains["user_id"] = 4
 
         # Matrix Generation Code
-        X = np.zeros((365 * 2,4))
+        X = None
         i = 0
         for keys in self.categoryClass.keys():
             constrains["category"] = keys
@@ -75,20 +77,28 @@ class Prediction(object):
             for row in rows:
                 data.append(row.values())
             raw = np.array(data)[:,[0,2]]
+            if X == None:
+                X = np.zeros((raw.shape[0],4))
             X[:,i] = raw[:,1].astype(float)
             i = i + 1
+        self.mean_X = np.mean(X,0)
+        self.std_X = np.std(X,0)
+        X = np.apply_along_axis(lambda x,m:np.subtract(x,m),1,X,self.mean_X)
+        X = np.apply_along_axis(lambda x,m:np.divide(x,m),1,X,self.std_X)
         return X
 
     def predictSingle(self,B,W,category):
         X = np.concatenate((self.X[-W.shape[0]+1:,self.categoryClass[category]].reshape((1,W.shape[0]-1)),np.ones((1,1))),axis = 1 )
         prediction = np.dot(self.mysigmoid(np.dot(X,W)),B)
+        prediction = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,prediction,self.std_X[self.categoryClass[category]])
+        prediction = np.apply_along_axis(lambda x,m:np.add(x,m),1,prediction,self.mean_X[self.categoryClass[category]])
         return prediction
     
     def predictOverAll(self):
         if not np.where(sum(self.predict,0) == 0):
             print "The final result might not be complete"
         for keys in self.categoryClass.keys():
-            [B,W] = self.train(keys)
+            [B,W,temp,temp1] = self.train(keys)
             self.predict[:,self.categoryClass[keys]] = self.predictSingle(B,W,keys)
         predictOverAll = np.sum(self.predict,1)
         return predictOverAll,self.predict
@@ -104,7 +114,7 @@ class Prediction(object):
             X = np.concatenate((training_x,np.ones((training_x.shape[0],1))),axis=1)
             Y = training_y
             H = self.mysigmoid(np.dot(X,W))
-            B = np.dot(np.linalg.pinv(H),Y)
+            B = np.dot(np.dot( np.linalg.inv(np.dot(H.T,H) + 0.0001 * np.eye(H.shape[1]) ) , H.T), Y)
 
             X_val = np.concatenate((validation_x,np.ones((validation_x.shape[0],1))),axis = 1)
             Y_val = validation_y
@@ -118,7 +128,7 @@ class Prediction(object):
                 Yt_best = np.dot(self.mysigmoid(np.dot(X,W)),B)
                 prediction_val_best = np.dot(self.mysigmoid(np.dot(X_val,W)),B)
         print "The number of neuron is %d, and best performance is %f"%(NO,best_prediction)
-        return B_best,W_best#Y_val,prediction_val
+        return B_best,W_best,Y_val,prediction_val_best
 
     def SplitData(self,category):
         raw = self.X[:,self.categoryClass[category]]
@@ -156,8 +166,8 @@ class Prediction(object):
         visualize = 1
         if visualize:
             import matplotlib.pyplot as plt
-            plt.plot(val_y)
-            plt.plot(val_t,'r--')
+            plt.plot(val_y[:,0])
+            plt.plot(val_t[:,0],'r--')
             plt.ylabel('Something')
             plt.show()
         return predict
@@ -170,23 +180,19 @@ class Prediction(object):
         '''
             Grocery,Entertain,Other,Schedule
         '''
-        ipdb.set_trace()
-        grocery = np.random.normal(5,3,365 * 2) # mu = 10 EUR, sigma = 2
         sample = np.zeros((7,1))
         sample[:,0] = [50,40,20,20,20,20,20]
-        sample = np.repeat(sample,105,axis = 0)
-        sample = sample[:,:730].copy()
-        entertain = np.zeros(grocery.shape)
-        Raw = np.random.normal(50,20, ( 365 * 2 / 7 ) * 2)
-        j = 5
-        for i in xrange(Raw.shape[0]):
-            if j < entertain.shape[0]:
-                entertain[j:j+2] = Raw[i:i+2]
-                j = j + 5;
+        sample = np.repeat(sample,109,axis = 1)
+        sample = sample.flatten('F')[:761]
+        grocery = sample + np.random.normal(5,3,365 * 2 + 31) # mu = 10 EUR, sigma = 2
+        sample = np.zeros((7,1))
+        sample[:,0] = [0,0,0,0,50,60,30]
+        sample = np.repeat(sample,109,axis = 1)
+        sample = sample.flatten('F')[:761]
+        entertain = sample + np.random.normal(10,1,365 * 2 + 31)
         other = np.zeros(grocery.shape)
-        Raw = 100 * np.random.poisson(1,10 * 24)
-        idx = np.random.permutation(other.shape[0])
-        other[idx[:100]] = Raw
+        #other = np.multiply(np.random.binomial(1,0.1,365 * 2),np.random.normal(50,10,365 * 2))
+        other = grocery.copy()
         schedule = np.zeros(grocery.shape)
         noDay = []
         for i in xrange(1,13):
@@ -194,8 +200,9 @@ class Prediction(object):
             noDay.append(month_day)
         noDay = np.array(noDay)
         noDay = np.hstack((noDay,noDay))
+        noDay = np.hstack((noDay,31))
         schedule_event = {
-                "salary":[5000,15],
+                "salary":[3000,15],
                 "rent":[-800,6],
                 "telephone":[-40,13],
                 "internet":[-40,6],
@@ -225,6 +232,7 @@ class Prediction(object):
             sys.exit(1)
 
         db_transaction = c['transactions']
+        '''
         for year in [2010,2011]:
             for month in xrange(1,13):
                 for date in xrange(1,noDay[month-1]+1):
@@ -239,7 +247,22 @@ class Prediction(object):
                                 "date": datetime(year,month,date)
                                 }
                         db_transaction.users.insert(transaction_doc,safe = True)
-                        print "Successfully Inserted document: %s"% transaction_doc
+                        print "Successfully Inserted documents"
+        '''
+        for year in [2012]:
+            for month in xrange(1,2):
+                for date in xrange(1,noDay[-1]):
+                    for category in Data.keys():
+                        index_transaction = 730 - 1 + date
+                        transaction_doc = {
+                                "user_id": 4,
+                                "category": category,
+                                "amount": Data[category][index_transaction],
+                                "date": datetime(year,month,date)
+                                }
+                        db_transaction.users.insert(transaction_doc,safe = True)
+                        print "Successfully Inserted document %s"%(transaction_doc)
+
         return None
 
     def PredictionDataInsertion(self,prediction_month,month,year,noDay):
@@ -248,7 +271,7 @@ class Prediction(object):
         except ConnectionFailure, e:
             sys.stderr.write("Could not connect to Server %s" %e)
             sys.exit(1)
-
+#
         db_transaction = c['transactions']
         Data = {"Grocery":prediction_month[:,0],
                 "Entertain":prediction_month[:,1],
@@ -288,14 +311,16 @@ class Prediction(object):
         [temp, noDay] = monthrange(year,month)
         self.preRange = noDay
         [prediction_month, prediction_month_detail]= self.predictOverAll() # Fix this function --> Include the single predictions
-        self.PredictionDataInsertion(prediction_month_detail,month,year,noDay)
-        ipdb.set_trace()
+        #self.PredictionDataInsertion(prediction_month_detail,month,year,noDay)
         if howManyDay == 0:
             howManyDay = noDay - 1
         Goal_diff = prediction_month[howManyDay] - Goal
         daily_allowance = np.zeros((noDay,1))
         actual_transactions = self.acquireData(start = datetime(year,month,1),end = datetime(year,month,day))
-        daily_allowance[:actual_transactions.shape[0]] = sum(actual_transactions,1) - prediction_month[actual_transactions.shape[0]]
+        actual_transactions = np.apply_along_axis(lambda x,m:np.multiply(x,m),1,actual_transactions,self.std_X)
+        actual_transactions = np.apply_along_axis(lambda x,m:np.add(x,m),1,actual_transactions,self.mean_X)
+        A = np.sum(actual_transactions,1) - prediction_month[actual_transactions.shape[0]]
+        daily_allowance[:A.shape[0],0] = A
         GoalGather = sum( daily_allowance ) / Goal_diff
         return GoalGather,daily_allowance[:actual_transactions.shape[0]]
 
@@ -311,6 +336,9 @@ if __name__ == "__main__":
     Data = np.random.rand(200,4)
     Data[:,0] = T['ts'][:,:200]
     TestPrediction = Prediction(preRange = 31,Data = None)
-    TestPrediction.insertFakeData()
+    #TestPrediction.insertFakeData()
+    #for keys in TestPrediction.categoryClass.keys():
+    #    predict = TestPrediction.model(keys)
     #predict_all = TestPrediction.predictOverAll()
-    #[GoalGather,daily_allowance] = TestPrediction.forcast(Goal = 500,day = 31,month = 1, year = 2012, howManyDay = 30)
+    [GoalGather,daily_allowance] = TestPrediction.forcast(Goal = 500,day = 31,month = 1, year = 2012, howManyDay = 30)
+    print GoalGather,daily_allowance
